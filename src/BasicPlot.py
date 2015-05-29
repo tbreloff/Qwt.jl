@@ -25,14 +25,25 @@ class EmptyWidget(Qt.QWidget):
 class SubplotWidget(Qt.QWidget):
     def __init__(self):
         super(SubplotWidget, self).__init__()
-        hbox = Qt.QHBoxLayout(self)
+        self.hbox = Qt.QHBoxLayout(self)
+        self.setLayout(self.hbox)
+        self.doinit()
+
+    def doinit(self):
         self.container = Qt.QSplitter(Qt.Qt.Vertical)
-        hbox.addWidget(self.container)
-        self.setLayout(hbox)
+        self.hbox.addWidget(self.container)
+
+    def clearhbox(self):
+        self.hbox.removeWidget(self.container)
+        self.container.setParent(None)
+        self.container = None
 
     # we expects figs to be nested BasicPlots (i.e. [[plt1, plt2], [plt3, None]] would give 2 rows, where plt1/2 are
     # in the first row and plt3 takes up the 3rd)
     def addFigures(self, figs):
+
+        self.clearhbox()
+        self.doinit()
 
         rows = []
         for row in figs:
