@@ -12,7 +12,7 @@ click and drag with the right mouse button
 
 # Examples:
 
-'''
+```
 # simple 2D line plot
 plot(1:10)
 
@@ -26,4 +26,4 @@ scatter(x, y)
 heatmap(randn(10000),randn(10000))
 
 subplot(rand(100,9))
-'''
+```
