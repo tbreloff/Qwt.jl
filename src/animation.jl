@@ -16,7 +16,7 @@ function animation(plt::PlotWidget, dir::ASCIIString)
 	PlotAnimation(1, plt, dir)
 end
 
-function update!(animation::PlotAnimation)
+function saveframe(animation::PlotAnimation)
 	savepng(animation.plt, string(animation.dir, @sprintf("plot%04d.png", animation.t)))
 	animation.t += 1
 end

@@ -20,14 +20,16 @@ Base.string(plt::Plot) = "Plot{lines=$(plt.lines)}"
 Base.print(io::IO, plt::Plot) = print(io, string(plt))
 Base.show(io::IO, plt::Plot) = print(io, string(plt))
 
-# add one data point for each line, all with the same x value
-function Base.push!(plt::Plot, x, ys)
-	@assert length(ys) == length(plt.lines)
+function Base.push!(plt::Plot, idx::Int, x::Number, y::Number)
+	push!(plt.lines[idx], x, y)
+end
 
+# add one data point for each line, all with the same x value
+function Base.push!(plt::Plot, x::Number, ys::Vector)
+	@assert length(ys) == length(plt.lines)
 	for (i,y) in enumerate(ys)
 		push!(plt.lines[i], x, y)
 	end
-	nothing
 end
 
 # refreshes the plot object
@@ -46,7 +48,14 @@ function refresh(plt::Plot)
 	nothing
 end
 
+function Base.empty!(plt::Plot)
+	for l in plt.lines
+		empty!(l)
+	end
+end
+
 getplot(plt::Plot, c::Int) = plt
+getline(plt::Plot, c::Int) = plt.lines[c]
 
 
 
@@ -59,12 +68,11 @@ resizewidget(plt::Plot, width::Int, height::Int) = resizewidget(plt.widget, widt
 move_resizewidget(plt::Plot, x::Int, y::Int, width::Int, height::Int) = move_resizewidget(plt.widget, x, y, width, height)
 savepng(plt::Plot, filename::String) = savepng(plt.widget, filename)
 
-windowtitle(plt::Plot, title::String) = windowtitle(plt.widget, title)
-
 title(plt::Plot, title::String) = plt.widget[:setPlotTitle](title)
 xlabel(plt::Plot, label::String) = plt.widget[:setXAxisTitle](label)
 ylabel(plt::Plot, label::String) = plt.widget[:setYAxisTitle](label)
 yrightlabel(plt::Plot, label::String) = plt.widget[:setYAxisTitleRight](label)
+windowtitle(plt::Plot, title::String) = windowtitle(plt.widget, title)
 
 
 ########################################################################################

@@ -12,7 +12,9 @@ export plot,
 			 scatter,
 			 heatmap,
 
+			 getline,
 			 setdata,
+			 addRegressionLine,
 			 refresh,
 			 title,
 			 xlabel,
@@ -20,24 +22,20 @@ export plot,
 			 yrightlabel,
 			 windowtitle,
 
+			 hidewidget,
+			 showwidget,
+			 widgetpos,
+			 widgetsize,
+			 movewidget,
+			 resizewidget,
+			 move_resizewidget,
+
 			 savepng,
 			 animation,
 			 saveframe,
 			 makegif
 
-# This is a wrapper around python, which is in turn a wrapper around Qwt5's plotting
 
-# ZOOMING
-# click and drag with the left mouse button to select a rectangle to zoom into
-# to undo 1 zoom, hold ALT and click the right mouse button
-# to redo 1 zoom, hold SHIFT and click the right mouse button
-# to reset the zoom stack, click the middle mouse button
-
-# PANNING
-# click and drag with the right mouse button
-
-
-# QT initialization
 print("Initializing Qwt... ")
 using PyCall
 @pyimport PyQt4.Qt as QT

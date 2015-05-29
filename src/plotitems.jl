@@ -42,6 +42,10 @@ function setdata(line::Series, x::Vector{Float64}, y::Vector{Float64})
 	line.y = y
 end
 
+function Base.empty!(line::Series)
+	setdata(line, zeros(0), zeros(0))
+end
+
 updateWidgetData(line::Series, pyobj::PyObject) = pyobj[:setData](line.x, line.y)
 
 getreglinecolor(line::Series) = line.color
