@@ -1,13 +1,13 @@
 # Qwt.jl
 Plot using Qwt (currently through PyQwt)
 
-## ZOOMING
-click and drag with the left mouse button to select a rectangle to zoom into
-to undo 1 zoom, hold ALT and click the right mouse button
-to redo 1 zoom, hold SHIFT and click the right mouse button
-to reset the zoom stack, click the middle mouse button
+## Zooming
+- click and drag with the left mouse button to select a rectangle to zoom into
+- to undo 1 zoom, hold ALT and click the right mouse button
+- to redo 1 zoom, hold SHIFT and click the right mouse button
+- to reset the zoom stack, click the middle mouse button
 
-## PANNING
+## Panning
 click and drag with the right mouse button
 
 ## Examples:
