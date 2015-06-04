@@ -141,7 +141,7 @@ autocolor(idx::Integer) = COLORS[mod1(idx,NUMCOLORS)]
 # add one line to plot
 function addline(plt::Plot, x, y, axis::Symbol, color::Symbol, label::String, width::Int, linetype::Symbol,
 																	 linestyle::Symbol, marker::Symbol, markercolor::Symbol, markersize::Int, 
-																	 heatmap_n::Int, heatmap_c::(Float64,Float64),
+																	 heatmap_n::Int, heatmap_c::Tuple{Float64,Float64},
 																	 tit::String, xlab::String, ylab::String, yrightlab::String)
 	
 	leftaxis = axis == :left
