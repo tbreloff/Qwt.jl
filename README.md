@@ -1,6 +1,20 @@
 # Qwt.jl
 Plot using Qwt (currently through PyQwt)
 
+## Install
+
+- Install python
+- Install PyQwt
+  - Download tar from: http://sourceforge.net/projects/pyqwt/files/pyqwt5/
+  - cd <download_location>
+  - tar -zxvf PyQwt-5.2.0.tar.gz
+  - cd PyQwt-5.2.1/configure
+  - python configure.py -Q ../qwt-5.2
+  - make
+  - sudo make install
+- Add the Qwt.jl/src directory to your PYTHONPATH environment variable
+
+
 ## Zooming
 - Click and drag with the left mouse button to select a rectangle to zoom into
 - To undo 1 zoom, hold ALT and click the right mouse button

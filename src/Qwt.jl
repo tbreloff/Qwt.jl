@@ -38,6 +38,7 @@ export plot,
 
 print("Initializing Qwt... ")
 using PyCall
+unshift!(PyVector(pyimport("sys")["path"]), "")
 @pyimport PyQt4.Qt as QT
 @pyimport BasicPlot as PLOT
 pygui_start(:qt)
