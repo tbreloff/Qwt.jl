@@ -12,7 +12,7 @@ Plot using Qwt (currently through PyQwt)
   - python configure.py -Q ../qwt-5.2
   - make
   - sudo make install
-- Add the Qwt.jl/src directory to your PYTHONPATH environment variable
+- Add the Qwt/src directory to your PYTHONPATH environment variable
 
 
 ## Zooming
