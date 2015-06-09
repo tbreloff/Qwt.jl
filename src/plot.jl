@@ -249,8 +249,10 @@ function oplot(plotwidget::PlotWidget; kvs...)
 end
 
 
-plot(y; kvs...) = plot(; y = y, kvs...)
-plot(x, y; kvs...) = plot(; x = x, y = y, kvs...)
+plot(y::AbstractArray; kvs...) = plot(; y = y, kvs...)
+plot(x::AbstractArray, y::AbstractArray; kvs...) = plot(; x = x, y = y, kvs...)
+plot(f::Function, x::AbstractArray; kvs...) = plot(; x = x, y = map(f, x), kvs...)
+
 
 function plot(; kvs...)
 	plt = Plot()
