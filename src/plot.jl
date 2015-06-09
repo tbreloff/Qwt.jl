@@ -204,8 +204,9 @@ function addRegressionLine(line)
 end
 
 
-oplot(plt::PlotWidget, y; kvs...) = oplot(plt; y = y, kvs...)
-oplot(plt::PlotWidget, x, y; kvs...) = oplot(plt; x = x, y = y, kvs...)
+oplot(plt::PlotWidget, y::AbstractArray; kvs...) = oplot(plt; y = y, kvs...)
+oplot(plt::PlotWidget, x::AbstractArray, y::AbstractArray; kvs...) = oplot(plt; x = x, y = y, kvs...)
+oplot(plt::PlotWidget, f::Function, x::AbstractArray; kvs...) = oplot(plt; x = x, y = map(f, x), kvs...)
 
 # generic way to add to plot
 function oplot(plotwidget::PlotWidget; kvs...)
