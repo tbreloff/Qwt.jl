@@ -41,6 +41,8 @@ using PyCall
 unshift!(PyVector(pyimport("sys")["path"]), "")
 @pyimport PyQt4.Qt as QT
 @pyimport BasicPlot as PLOT
+@pyimport pythonwidgets as WIDGETS
+@pyimport FancyPlot as FPLOT
 pygui_start(:qt)
 const QAPP = QT.QApplication([])
 println("done.")
