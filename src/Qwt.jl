@@ -43,6 +43,7 @@ unshift!(PyVector(pyimport("sys")["path"]), "")
 @pyimport BasicPlot as PLOT
 @pyimport pythonwidgets as WIDGETS
 @pyimport FancyPlot as FPLOT
+# @pyimport ZoomableGraphicsView as ZOOM
 pygui_start(:qt)
 const QAPP = QT.QApplication([])
 println("done.")

@@ -1,5 +1,6 @@
 import sys, os, time
 from qwt_common import *
+from pythonwidgets import *
 import PyQt4.Qwt5 as Qwt
 import scales
 from PyQt4 import Qt, QtCore, QtGui
