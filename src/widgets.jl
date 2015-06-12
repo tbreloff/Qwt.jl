@@ -1,4 +1,6 @@
 
+# a Widget is expected to have a field "widget::PyObject" which is a QWidget
+abstract Widget
 
 showwidget(widget::PyObject) = (widget[:showNormal](); widget[:raise_](); widget[:activateWindow](); nothing)
 hidewidget(widget::PyObject) = (widget[:hide](); nothing)
@@ -10,3 +12,13 @@ move_resizewidget(widget::PyObject, x::Int, y::Int, width::Int, height::Int) = (
 savepng(widget::PyObject, filename::String) = QT.QPixmap()[:grabWidget](widget)[:save](filename, "PNG")
 windowtitle(widget::PyObject, title::String) = (widget[:setWindowTitle](title); nothing)
 moveWindowToCenterScreen(mp) = movewidget(mp, 1920, 20) # TODO: remove??
+
+
+
+showwidget(w::Widget) = showwidget(w.widget)
+hidewidget(w::Widget) = hidewidget(w.widget)
+widgetpos(w::Widget) = widgetpos(w.widget)
+widgetsize(w::Widget) = widgetsize(w.widget)
+movewidget(w::Widget, x::Int, y::Int) = movewidget(w.widget, x, y)
+resizewidget(w::Widget, width::Int, height::Int) = resizewidget(w.widget, width, height)
+move_resizewidget(w::Widget, x::Int, y::Int, width::Int, height::Int) = move_resizewidget(w.widget, x, y, width, height)

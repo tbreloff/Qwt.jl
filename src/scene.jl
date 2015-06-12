@@ -12,14 +12,9 @@ P3(p::P2) = P3(p[1], p[2], 0.0)
 
 typealias Point Union(P2,P3)
 
-# P2(o::PyObject) = P2(o[:x](), o[:y]())
-# P3(o::PyObject) = P3(P2(o)..., o[:zValue]())
-
-
-
 # -----------------------------------------------------------------------
 
-immutable Scene
+immutable Scene <: Widget
 	widget::PyObject # qt view
 	scene::PyObject # qt scene
 	items::Vector{SceneItem}
@@ -58,14 +53,14 @@ function Base.empty!(scene::Scene)
 	scene.scene[:clear]()
 end
 
-# coordinates of widget on screen
-showwidget(scene::Scene) = showwidget(scene.widget)
-hidewidget(scene::Scene) = hidewidget(scene.widget)
-widgetpos(scene::Scene) = widgetpos(scene.widget)
-widgetsize(scene::Scene) = widgetsize(scene.widget)
-movewidget(scene::Scene, x::Int, y::Int) = movewidget(scene.widget, x, y)
-resizewidget(scene::Scene, width::Int, height::Int) = resizewidget(scene.widget, width, height)
-move_resizewidget(scene::Scene, x::Int, y::Int, width::Int, height::Int) = move_resizewidget(scene.widget, x, y, width, height)
+# # coordinates of widget on screen
+# showwidget(scene::Scene) = showwidget(scene.widget)
+# hidewidget(scene::Scene) = hidewidget(scene.widget)
+# widgetpos(scene::Scene) = widgetpos(scene.widget)
+# widgetsize(scene::Scene) = widgetsize(scene.widget)
+# movewidget(scene::Scene, x::Int, y::Int) = movewidget(scene.widget, x, y)
+# resizewidget(scene::Scene, width::Int, height::Int) = resizewidget(scene.widget, width, height)
+# move_resizewidget(scene::Scene, x::Int, y::Int, width::Int, height::Int) = move_resizewidget(scene.widget, x, y, width, height)
 
 # coordinates within scene
 rect(scene::Scene) = scene.scene[:sceneRect]()
@@ -118,9 +113,6 @@ Base.position(item::SceneItem) = position(item.o[:pos]())
 position3d(item::SceneItem) = P3(position(item)..., zvalue(item))
 position!(item::SceneItem, p::P2) = (item.o[:setPos](p...); item)
 position!(item::SceneItem, p::P3) = (position!(item, P2(p)); zvalue!(item, p[3]); item)
-# center(item::SceneItem) = P2(item.o[:boundingRect]()[:center]())
-# center!(item::SceneItem) = center!(item, P2(0,0))
-# center!(item::SceneItem, p::P2) = move!(item, p - center(item))
 zvalue(item::SceneItem) = item.o[:zValue]()
 zvalue!(item::SceneItem, z::Real) = (item.o[:setZValue](float(z)); item)
 rotation(item::SceneItem) = item.o[:rotation]()

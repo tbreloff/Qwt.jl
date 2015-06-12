@@ -1,20 +1,22 @@
 
 # NOTE: these can be standalone windows, or subplots within a Subplots window
 
-abstract PlotWidget
+abstract PlotWidget <: Widget
 
 type Plot <: PlotWidget
-	widget::PyObject
+	widget::PyObject  # BasicPlot
 	lines::Vector{PlotItem}
 	numLeft::Int
 	numRight::Int
 
-	function Plot()
-		widget = PLOT.BasicPlot()
-		widget[:resize](800,600)
-		new(widget, PlotItem[], 0, 0)
-	end
+	# function Plot()
+	# 	widget = PLOT.BasicPlot()
+	# 	widget[:resize](800,600)
+	# 	new(widget, PlotItem[], 0, 0)
+	# end
 end
+
+Plot() = Plot(PLOT.BasicPlot(), PlotItem[], 0, 0)
 
 Base.string(plt::Plot) = "Plot{lines=$(plt.lines)}"
 Base.print(io::IO, plt::Plot) = print(io, string(plt))
@@ -59,13 +61,13 @@ getline(plt::Plot, c::Int) = plt.lines[c]
 
 
 
-showwidget(plt::Plot) = showwidget(plt.widget)
-hidewidget(plt::Plot) = hidewidget(plt.widget)
-widgetpos(plt::Plot) = widgetpos(plt.widget)
-widgetsize(plt::Plot) = widgetsize(plt.widget)
-movewidget(plt::Plot, x::Int, y::Int) = movewidget(plt.widget, x, y)
-resizewidget(plt::Plot, width::Int, height::Int) = resizewidget(plt.widget, width, height)
-move_resizewidget(plt::Plot, x::Int, y::Int, width::Int, height::Int) = move_resizewidget(plt.widget, x, y, width, height)
+# showwidget(plt::Plot) = showwidget(plt.widget)
+# hidewidget(plt::Plot) = hidewidget(plt.widget)
+# widgetpos(plt::Plot) = widgetpos(plt.widget)
+# widgetsize(plt::Plot) = widgetsize(plt.widget)
+# movewidget(plt::Plot, x::Int, y::Int) = movewidget(plt.widget, x, y)
+# resizewidget(plt::Plot, width::Int, height::Int) = resizewidget(plt.widget, width, height)
+# move_resizewidget(plt::Plot, x::Int, y::Int, width::Int, height::Int) = move_resizewidget(plt.widget, x, y, width, height)
 savepng(plt::Plot, filename::String) = savepng(plt.widget, filename)
 
 title(plt::Plot, title::String) = plt.widget[:setPlotTitle](title)
@@ -256,10 +258,14 @@ plot(f::Function, x::AbstractArray; kvs...) = plot(; x = x, y = map(f, x), kvs..
 
 
 function plot(; kvs...)
+	
 	plt = Plot()
 	oplot(plt; kvs...)
+
+	resizewidget(plt, 800, 600)
 	showwidget(plt)
 	moveWindowToCenterScreen(plt)
+	
 	plt
 end
 

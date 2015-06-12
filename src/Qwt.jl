@@ -30,6 +30,13 @@ export plot,
 			 resizewidget,
 			 move_resizewidget,
 
+			 Layout,
+			 Splitter,
+			 vbox,
+			 hbox,
+			 vsplitter,
+			 hsplitter,
+
 			 savepng,
 			 animation,
 			 saveframe,
@@ -105,6 +112,7 @@ println("done.")
 
 
 include("widgets.jl")
+include("layout.jl")
 include("plotitems.jl")
 include("plot.jl")
 include("subplot.jl")
