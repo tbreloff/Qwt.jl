@@ -91,7 +91,8 @@ currentScene!(scene::Scene) = (CURRENT_SCENE.nullablescene = Nullable(scene))
 
 # -----------------------------------------------------------------------
 
-convertToRGBInt(x::Real) = round(Int, x * 255.0)
+convertToRGBInt(x::Real) = max(0, min(round(Int, x * 255.0), 255))
+
 makecolor(color::Symbol) = QT.QColor(string(color))
 makecolor(color::String) = QT.QColor(color)
 makecolor(args...) = QT.QColor(map(convertToRGBInt, args)...)  # args: r, g, b [, a]
