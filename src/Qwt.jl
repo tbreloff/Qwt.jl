@@ -96,8 +96,9 @@ export plot,
 			 text!,
 			 line!
 
-
-
+# ------------------------------------------------------
+# Setup Qt
+# ------------------------------------------------------
 print("Initializing Qwt... ")
 using PyCall
 unshift!(PyVector(pyimport("sys")["path"]), "")  # so you can load python files from the current directory
@@ -109,6 +110,20 @@ unshift!(PyVector(pyimport("sys")["path"]), "")  # so you can load python files 
 pygui_start(:qt)
 const QAPP = QT.QApplication([])
 println("done.")
+# ------------------------------------------------------
+
+
+using ImmutableArrays
+
+typealias P2 Vector2{Float64}
+typealias P3 Vector3{Float64}
+typealias Point Union(P2,P3)
+
+const ORIGIN = P3(0,0,0)
+
+P2(p::P3) = P2(p[1], p[2])
+P3(p::P2) = P3(p[1], p[2], 0.0)
+
 
 
 include("widgets.jl")

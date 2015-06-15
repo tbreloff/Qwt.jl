@@ -76,6 +76,6 @@ end
 # movewidget(sp::Subplots, x::Int, y::Int) = movewidget(sp.widget, x, y)
 # resizewidget(sp::Subplots, width::Int, height::Int) = resizewidget(sp.widget, width, height)
 # move_resizewidget(sp::Subplots, x::Int, y::Int, width::Int, height::Int) = move_resizewidget(sp.widget, x, y, width, height)
-savepng(sp::Subplots, filename::String) = savepng(sp.widget, filename)
+# savepng(sp::Subplots, filename::String) = savepng(sp.widget, filename)
 
-windowtitle(sp::Subplots, title::String) = windowtitle(sp.widget, title)
+# windowtitle(sp::Subplots, title::String) = windowtitle(sp.widget, title)

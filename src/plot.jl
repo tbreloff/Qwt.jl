@@ -68,13 +68,13 @@ getline(plt::Plot, c::Int) = plt.lines[c]
 # movewidget(plt::Plot, x::Int, y::Int) = movewidget(plt.widget, x, y)
 # resizewidget(plt::Plot, width::Int, height::Int) = resizewidget(plt.widget, width, height)
 # move_resizewidget(plt::Plot, x::Int, y::Int, width::Int, height::Int) = move_resizewidget(plt.widget, x, y, width, height)
-savepng(plt::Plot, filename::String) = savepng(plt.widget, filename)
+# savepng(plt::Plot, filename::String) = savepng(plt.widget, filename)
 
 title(plt::Plot, title::String) = plt.widget[:setPlotTitle](title)
 xlabel(plt::Plot, label::String) = plt.widget[:setXAxisTitle](label)
 ylabel(plt::Plot, label::String) = plt.widget[:setYAxisTitle](label)
 yrightlabel(plt::Plot, label::String) = plt.widget[:setYAxisTitleRight](label)
-windowtitle(plt::Plot, title::String) = windowtitle(plt.widget, title)
+# windowtitle(plt::Plot, title::String) = windowtitle(plt.widget, title)
 
 
 ########################################################################################
@@ -229,16 +229,13 @@ function oplot(plotwidget::PlotWidget; kvs...)
 		Y = repmat(Y, 1, xcols)
 	end
 
-	if haskey(d, :windowtitle)
-		windowtitle(plotwidget, d[:windowtitle])
-	end
-
+	# add the lines
 	for c in 1:ycols
 		x = X[:,(xcols==1 ? 1 : c)]
 		plt = getplot(plotwidget, c)  # get the correct Plot... nop when plotwidget is Plot, gets sp.plots[c] if MySubplot
-		if isempty(x)
-			continue
-		end
+		# if isempty(x)
+		# 	continue
+		# end
 		
 		line = addline(plt, x, Y[:,c], [getarg(s,d,c) for s in (:axis, :color, :label, :width, :linetype, :linestyle, :marker, :markercolor, :markersize, :heatmap_n, :heatmap_c, :title, :xlabel, :ylabel, :yrightlabel)]...)
 
@@ -247,8 +244,29 @@ function oplot(plotwidget::PlotWidget; kvs...)
 		end
 	end
 
-	refresh(plotwidget)
+	updateWindow(plotwidget, d)
 	plotwidget
+end
+
+function updateWindow(plotwidget::PlotWidget, d::Dict)
+	if haskey(d, :size)
+		resizewidget(plotwidget, d[:size])
+	end
+	if haskey(d, :windowtitle)
+		windowtitle(plotwidget, d[:windowtitle])
+	end
+
+	if haskey(d, :center) && d[:center]
+		moveWindowToCenterScreen(plotwidget)
+	elseif haskey(d, :pos)
+		movewidget(plotwidget, d[:pos])
+	end
+
+	refresh(plotwidget)
+
+	if haskey(d, :show) && d[:show]
+		showwidget(plotwidget)
+	end
 end
 
 
@@ -260,11 +278,18 @@ plot(f::Function, x::AbstractArray; kvs...) = plot(; x = x, y = map(f, x), kvs..
 function plot(; kvs...)
 	
 	plt = Plot()
+	resizewidget(plt, 800, 600)
+	moveWindowToCenterScreen(plt)
+
+	# show the plot (unless show=false)
+	if !((:show, false) in kvs)
+		push!(kvs, (:show, true))
+	end
+
 	oplot(plt; kvs...)
 
-	resizewidget(plt, 800, 600)
-	showwidget(plt)
-	moveWindowToCenterScreen(plt)
+	# showwidget(plt)
+	# moveWindowToCenterScreen(plt)
 	
 	plt
 end

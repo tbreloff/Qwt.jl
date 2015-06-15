@@ -1,16 +1,6 @@
 
-using ImmutableArrays
 
-typealias P2 Vector2{Float64}
-typealias P3 Vector3{Float64}
 abstract SceneItem
-
-const ORIGIN = P3(0,0,0)
-
-P2(p::P3) = P2(p[1], p[2])
-P3(p::P2) = P3(p[1], p[2], 0.0)
-
-typealias Point Union(P2,P3)
 
 # -----------------------------------------------------------------------
 
