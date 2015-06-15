@@ -22,6 +22,9 @@ export plot,
 			 yrightlabel,
 			 windowtitle,
 
+			 Widget,
+			 PlotWidget,
+
 			 hidewidget,
 			 showwidget,
 			 widgetpos,
@@ -122,7 +125,8 @@ typealias Point Union(P2,P3)
 const ORIGIN = P3(0,0,0)
 
 P2(p::P3) = P2(p[1], p[2])
-P3(p::P2) = P3(p[1], p[2], 0.0)
+P3(p::P2, z::Real) = P3(p[1], p[2], z)
+P3(p::P2) = P3(p, 0.0)
 
 
 

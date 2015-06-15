@@ -180,10 +180,11 @@ immutable Line <: SceneItem; o::PyObject; end
 Line(p1::P2, p2::P2) = (l = Line(QT.QGraphicsLineItem(p1[1], p1[2], p2[1], p2[2])); zvalue!(l, -10000.0); l)
 Line(p1::P3, p2::P3) = (l = Line(P2(p1), P2(p2)); zvalue!(l, (p1[3] + p2[3]) / 2.0 - 0.0001); l)
 
-# create a new line connecting 2 items
 line!(scene::Scene, p1::Point, p2::Point) = push!(scene, Line(p1, p2))
 line!(scene::Scene, x1::Real, y1::Real, x2::Real, y2::Real) = line!(scene, P2(x1,y1), P2(x2,y2))
 line!(scene::Scene, item1::SceneItem, item2::SceneItem) = line!(scene, position3d(item1), position3d(item2))
+line!(scene::Scene, p1::Point, item2::SceneItem) = line!(scene, P3(p1), position3d(item2))
+line!(scene::Scene, item1::SceneItem, p2::Point) = line!(scene, position3d(item1), P3(p2))
 line!(args...) = line!(currentScene(), args...)
 
 # -----------------------------------------------------------------------
