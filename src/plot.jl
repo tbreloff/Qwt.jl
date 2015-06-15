@@ -8,12 +8,6 @@ type Plot <: PlotWidget
 	lines::Vector{PlotItem}
 	numLeft::Int
 	numRight::Int
-
-	# function Plot()
-	# 	widget = PLOT.BasicPlot()
-	# 	widget[:resize](800,600)
-	# 	new(widget, PlotItem[], 0, 0)
-	# end
 end
 
 Plot() = Plot(PLOT.BasicPlot(), PlotItem[], 0, 0)
@@ -61,20 +55,10 @@ getline(plt::Plot, c::Int) = plt.lines[c]
 
 
 
-# showwidget(plt::Plot) = showwidget(plt.widget)
-# hidewidget(plt::Plot) = hidewidget(plt.widget)
-# widgetpos(plt::Plot) = widgetpos(plt.widget)
-# widgetsize(plt::Plot) = widgetsize(plt.widget)
-# movewidget(plt::Plot, x::Int, y::Int) = movewidget(plt.widget, x, y)
-# resizewidget(plt::Plot, width::Int, height::Int) = resizewidget(plt.widget, width, height)
-# move_resizewidget(plt::Plot, x::Int, y::Int, width::Int, height::Int) = move_resizewidget(plt.widget, x, y, width, height)
-# savepng(plt::Plot, filename::String) = savepng(plt.widget, filename)
-
 title(plt::Plot, title::String) = plt.widget[:setPlotTitle](title)
 xlabel(plt::Plot, label::String) = plt.widget[:setXAxisTitle](label)
 ylabel(plt::Plot, label::String) = plt.widget[:setYAxisTitle](label)
 yrightlabel(plt::Plot, label::String) = plt.widget[:setYAxisTitleRight](label)
-# windowtitle(plt::Plot, title::String) = windowtitle(plt.widget, title)
 
 
 ########################################################################################
@@ -178,8 +162,6 @@ function addline(plt::Plot, x, y, axis::Symbol, color::Symbol, label::String, wi
 	setdata(plotitem, x, y)
 	push!(plt.lines, plotitem)
 
-	# println("addline: $plotitem $color $label $width $linetype $linestyle $marker $markercolor $markersize $heatmap_n $heatmap_c")
-
 	tit != "" && title(plt, tit)
 	xlab != "" && xlabel(plt, xlab)
 	ylab != "" && ylabel(plt, ylab)
@@ -256,8 +238,8 @@ function updateWindow(plotwidget::PlotWidget, d::Dict)
 		windowtitle(plotwidget, d[:windowtitle])
 	end
 
-	if haskey(d, :center) && d[:center]
-		moveWindowToCenterScreen(plotwidget)
+	if haskey(d, :screen)
+		moveToScreen(plotwidget, d[:screen])
 	elseif haskey(d, :pos)
 		movewidget(plotwidget, d[:pos])
 	end
@@ -279,7 +261,7 @@ function plot(; kvs...)
 	
 	plt = Plot()
 	resizewidget(plt, 800, 600)
-	moveWindowToCenterScreen(plt)
+	moveToLastScreen(plt)  # partial hack so it goes to my center monitor... sorry
 
 	# show the plot (unless show=false)
 	if !((:show, false) in kvs)
@@ -287,10 +269,6 @@ function plot(; kvs...)
 	end
 
 	oplot(plt; kvs...)
-
-	# showwidget(plt)
-	# moveWindowToCenterScreen(plt)
-	
 	plt
 end
 

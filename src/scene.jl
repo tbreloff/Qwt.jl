@@ -11,7 +11,7 @@ immutable Scene <: Widget
 end
 
 # set up the scene
-function Scene(pos::P2 = P2(2000,0), sz::P2 = P2(1000,1000))
+function Scene(pos::P2 = P2(2000,0), sz::P2 = P2(1000,1000); show=true)
 
 	scene = QT.QGraphicsScene()
 	widget = QT.QGraphicsView(scene)
@@ -25,7 +25,10 @@ function Scene(pos::P2 = P2(2000,0), sz::P2 = P2(1000,1000))
 	w, h = size(widget[:contentsRect]()[:size]())
 	scene[:setSceneRect](-w/2, -h/2, w, h)
 
-	showwidget(widget)
+	if show
+		showwidget(widget)
+	end
+
 	s = Scene(widget, scene, SceneItem[])
 	currentScene!(s)
 	s

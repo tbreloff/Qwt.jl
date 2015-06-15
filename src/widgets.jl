@@ -4,6 +4,8 @@ abstract Widget
 
 roundint(x::FloatingPoint) = round(Int, x)
 
+
+# methods for the python widget
 showwidget(w::PyObject) = (w[:showNormal](); w[:raise_](); w[:activateWindow](); nothing)
 hidewidget(w::PyObject) = (w[:hide](); nothing)
 widgetpos(w::PyObject) = (point = w[:pos](); (point[:x](), point[:y]))
@@ -17,9 +19,11 @@ move_resizewidget(w::PyObject, pos::P2, sz::P2) = (movewidget(w, pos); resizewid
 savepng(w::PyObject, filename::String) = QT.QPixmap()[:grabWidget](w)[:save](filename, "PNG")
 windowtitle(w::PyObject, title::String) = (w[:setWindowTitle](title); nothing)
 Base.close(w::PyObject) = hidewidget(w)  # TODO: clean up python objects properly
+moveToScreen(w::PyObject, screenNum::Int = 1) = movewidget(w, screenPosition(screenNum))
+moveToLastScreen(w::PyObject) = moveToScreen(w, screenCount())
 
 
-
+# methods for the Julia widget (generally just pass to the python version)
 showwidget(w::Widget) = showwidget(w.widget)
 hidewidget(w::Widget) = hidewidget(w.widget)
 widgetpos(w::Widget) = widgetpos(w.widget)
@@ -30,5 +34,14 @@ move_resizewidget(w::Widget, args...) = move_resizewidget(w.widget, args...)
 savepng(w::Widget, args...) = savepng(w.widget, args...)
 windowtitle(w::Widget, args...) = windowtitle(w.widget, args...)
 Base.close(w::Widget) = close(w.widget)
+moveToScreen(w::Widget, screenNum::Int = 1) = moveToScreen(w.widget, screenNum)
+moveToLastScreen(w::Widget) = moveToLastScreen(w.widget)
 
-moveWindowToCenterScreen(w::Widget) = movewidget(w::Widget, 1920, 20) # TODO: remove? calculate correct coords?
+
+# methods for desktop info
+desktop() = QAPP[:desktop]()
+screenCount() = desktop()[:screenCount]()
+screenGeometry(screenNum::Int = 1) = desktop()[:screenGeometry](screenNum)
+screenPosition(screenNum::Int = 1) = position(screenGeometry(screenNum))
+screenSize(screenNum::Int = 1) = size(screenGeometry(screenNum))
+

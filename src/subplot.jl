@@ -9,11 +9,7 @@ type Subplots <: PlotWidget
 	nrows::Int
 	ncols::Int
 
-	function Subplots()
-		widget = PLOT.SubplotWidget()
-		widget[:resize](800,600)
-		new(widget, [], 0, 0, 0)
-	end
+	Subplots() = new(PLOT.SubplotWidget(), [], 0, 0, 0)
 end
 
 function updateGrid(sp::Subplots)
@@ -56,26 +52,17 @@ subplot(x, y; kvs...) = subplot(; x = x, y = y, kvs...)
 
 function subplot(; kvs...)
 	sp = Subplots()
+	resizewidget(sp, 800, 600)
+	moveToLastScreen(sp)
 	
 	d = Dict(kvs)
 	sp.nrowsOverride = get(d, :nrows, 0)
 	sp.ncolsOverride = get(d, :ncols, 0)
 
+	if !((:show, false) in kvs)
+		push!(kvs, (:show, true))
+	end
+
 	oplot(sp; kvs...)
-	sp.widget[:show]()
-	moveWindowToCenterScreen(sp)
 	sp
 end
-
-
-
-# showwidget(sp::Subplots) = showwidget(sp.widget)
-# hidewidget(sp::Subplots) = hidewidget(sp.widget)
-# widgetpos(sp::Subplots) = widgetpos(sp.widget)
-# widgetsize(sp::Subplots) = widgetsize(sp.widget)
-# movewidget(sp::Subplots, x::Int, y::Int) = movewidget(sp.widget, x, y)
-# resizewidget(sp::Subplots, width::Int, height::Int) = resizewidget(sp.widget, width, height)
-# move_resizewidget(sp::Subplots, x::Int, y::Int, width::Int, height::Int) = move_resizewidget(sp.widget, x, y, width, height)
-# savepng(sp::Subplots, filename::String) = savepng(sp.widget, filename)
-
-# windowtitle(sp::Subplots, title::String) = windowtitle(sp.widget, title)

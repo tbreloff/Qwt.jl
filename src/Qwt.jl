@@ -32,6 +32,11 @@ export plot,
 			 movewidget,
 			 resizewidget,
 			 move_resizewidget,
+			 screenCount,
+			 screenPosition,
+			 screenSize,
+			 moveToScreen,
+			 moveToLastScreen,
 
 			 Layout,
 			 Splitter,
@@ -47,6 +52,7 @@ export plot,
 
 			 P2, # 2D point
 			 P3, # 3D point
+			 Point,
 			 ORIGIN,
 			 Scene,
 			 SceneItem,
@@ -72,8 +78,6 @@ export plot,
 			 makepen,
 			 position3d,
 			 position!,
-			 # center,
-			 # center!,
 			 zvalue,
 			 zvalue!,
 			 rotation,
@@ -109,7 +113,6 @@ unshift!(PyVector(pyimport("sys")["path"]), "")  # so you can load python files 
 @pyimport BasicPlot as PLOT
 @pyimport pythonwidgets as WIDGETS
 @pyimport FancyPlot as FPLOT
-# @pyimport ZoomableGraphicsView as ZOOM
 pygui_start(:qt)
 const QAPP = QT.QApplication([])
 println("done.")
