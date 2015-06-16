@@ -5,45 +5,45 @@ abstract SceneItem
 # -----------------------------------------------------------------------
 
 immutable Scene <: Widget
-	widget::PyObject # qt view
-	scene::PyObject # qt scene
-	items::Vector{SceneItem}
+  widget::PyObject # qt view
+  scene::PyObject # qt scene
+  items::Vector{SceneItem}
 end
 
 # set up the scene
 function Scene(pos::P2 = P2(2000,0), sz::P2 = P2(1000,1000); show=true)
 
-	scene = QT.QGraphicsScene()
-	widget = QT.QGraphicsView(scene)
+  scene = QT.QGraphicsScene()
+  widget = QT.QGraphicsView(scene)
 
-	# adjust position and window coordinates
-	screenx, screeny = pos
-	w, h = sz
-	widget[:setGeometry](screenx, screeny, w+1, h+1)
+  # adjust position and window coordinates
+  screenx, screeny = pos
+  w, h = sz
+  widget[:setGeometry](screenx, screeny, w+1, h+1)
 
-	# rescale w,h to contents size
-	w, h = size(widget[:contentsRect]()[:size]())
-	scene[:setSceneRect](-w/2, -h/2, w, h)
+  # rescale w,h to contents size
+  w, h = size(widget[:contentsRect]()[:size]())
+  scene[:setSceneRect](-w/2, -h/2, w, h)
 
-	if show
-		showwidget(widget)
-	end
+  if show
+    showwidget(widget)
+  end
 
-	s = Scene(widget, scene, SceneItem[])
-	currentScene!(s)
-	s
+  s = Scene(widget, scene, SceneItem[])
+  currentScene!(s)
+  s
 end
 
 
 function Base.push!(scene::Scene, item::SceneItem)
-	scene.scene[:addItem](item.o)
-	push!(scene.items, item)
-	item
+  scene.scene[:addItem](item.o)
+  push!(scene.items, item)
+  item
 end
 
 function Base.empty!(scene::Scene)
-	empty!(scene.items)
-	scene.scene[:clear]()
+  empty!(scene.items)
+  scene.scene[:clear]()
 end
 
 # # coordinates of widget on screen
@@ -71,14 +71,14 @@ background!(args...) = background!(currentScene(), args...)
 # -----------------------------------------------------------------------
 
 type CurrentScene
-	nullablescene::Nullable{Scene}
+  nullablescene::Nullable{Scene}
 end
 const CURRENT_SCENE = CurrentScene(Nullable{Scene}())
 
 function currentScene()
-	# create a new scene if it doesn't exist yet
-	isnull(CURRENT_SCENE.nullablescene) && currentScene!(Scene())
-	get(CURRENT_SCENE.nullablescene)
+  # create a new scene if it doesn't exist yet
+  isnull(CURRENT_SCENE.nullablescene) && currentScene!(Scene())
+  get(CURRENT_SCENE.nullablescene)
 end
 currentScene!(scene::Scene) = (CURRENT_SCENE.nullablescene = Nullable(scene))
 
@@ -135,10 +135,10 @@ rotate!(item::SceneItem, deg::Real) = rotation!(item, deg + rotation(item))
 
 immutable Ellipse <: SceneItem; o::PyObject; end
 function Ellipse(radius::P2, pos::Point = ORIGIN)
-	rx, ry = radius
-	item = Ellipse(QT.QGraphicsEllipseItem(-rx, -ry, rx*2.0, ry*2.0))
-	position!(item, pos)
-	item
+  rx, ry = radius
+  item = Ellipse(QT.QGraphicsEllipseItem(-rx, -ry, rx*2.0, ry*2.0))
+  position!(item, pos)
+  item
 end
 Circle(radius::Real, center::Point = ORIGIN) = Ellipse(P2(radius, radius), center)
 
@@ -151,10 +151,10 @@ circle!(args...) = circle!(currentScene(), args...)
 
 immutable Rect <: SceneItem; o::PyObject; end
 function Rect(sz::P2, pos::Point = ORIGIN)
-	w, h = sz
-	item = Rect(QT.QGraphicsRectItem(-w/2, -h/2, w, h))
-	position!(item, pos)
-	item
+  w, h = sz
+  item = Rect(QT.QGraphicsRectItem(-w/2, -h/2, w, h))
+  position!(item, pos)
+  item
 end
 Square(w::Real, pos::Point = ORIGIN) = Rect(P2(w, w), pos)
 
@@ -167,9 +167,9 @@ square!(args...) = square!(currentScene(), args...)
 
 immutable SceneText <: SceneItem; o::PyObject; end
 function SceneText(s::String, pos::Point = ORIGIN)
-	item = SceneText(QT.QGraphicsSimpleTextItem(s))
-	position!(item, pos)
-	item
+  item = SceneText(QT.QGraphicsSimpleTextItem(s))
+  position!(item, pos)
+  item
 end
 
 text!(scene::Scene, args...) = push!(scene, SceneText(args...))
