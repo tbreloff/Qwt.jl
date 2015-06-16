@@ -165,14 +165,14 @@ square!(args...) = square!(currentScene(), args...)
 
 # -----------------------------------------------------------------------
 
-immutable Text <: SceneItem; o::PyObject; end
-function Text(s::String, pos::Point = ORIGIN)
-	item = Text(QT.QGraphicsSimpleTextItem(s))
+immutable SceneText <: SceneItem; o::PyObject; end
+function SceneText(s::String, pos::Point = ORIGIN)
+	item = SceneText(QT.QGraphicsSimpleTextItem(s))
 	position!(item, pos)
 	item
 end
 
-text!(scene::Scene, args...) = push!(scene, Text(args...))
+text!(scene::Scene, args...) = push!(scene, SceneText(args...))
 text!(args...) = text!(currentScene(), args...)
 
 # -----------------------------------------------------------------------

@@ -60,7 +60,7 @@ export plot,
 			 Circle,
 			 Rect,
 			 Square,
-			 Text,
+			 SceneText,
 			 Line,
 
 			 currentScene,
@@ -113,7 +113,7 @@ unshift!(PyVector(pyimport("sys")["path"]), "")  # so you can load python files 
 @pyimport BasicPlot as PLOT
 @pyimport pythonwidgets as WIDGETS
 @pyimport FancyPlot as FPLOT
-pygui_start(:qt)
+pygui_start(:qt_pyqt4)
 const QAPP = QT.QApplication([])
 println("done.")
 # ------------------------------------------------------
