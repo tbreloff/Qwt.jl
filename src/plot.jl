@@ -143,7 +143,7 @@ function addline(plt::Plot, x, y, axis::Symbol, color::Symbol, label::String, wi
 
   color = (color == :auto ? autocolor(idx) : color)
   markercolor = (markercolor == :auto ? autocolor(idx) : markercolor)
-  label = string(label == "AUTO" ? "y_$idx" : label, " ($(leftaxis ? "L" : "R"))")
+  label = string(label == "AUTO" ? "y_$idx" : label, leftaxis ? "" : " (R)")
 
   # check our inputs
   @assert color in COLORS
