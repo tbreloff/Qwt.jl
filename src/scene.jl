@@ -91,7 +91,7 @@ makecolor(color::String) = QT.QColor(color)
 makecolor(args...) = QT.QColor(map(convertToRGBInt, args)...)  # args: r, g, b [, a]
 
 makebrush(args...) = QT.QBrush(makecolor(args...))
-makepen(width::Real, args...) = QT.QPen(makecolor(args...), float(width))
+makepen(width::Real, args...) = width == 0 ? QT.QPen(0) : QT.QPen(makecolor(args...), float(width))
 
 # -----------------------------------------------------------------------
 
