@@ -1,7 +1,5 @@
 
 
-require("PyCall")
-
 
 module Qwt
 
