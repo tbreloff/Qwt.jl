@@ -21,17 +21,24 @@ function Scene(pos::P2 = P2(2000,0), sz::P2 = P2(1000,1000); show=true)
   w, h = sz
   widget[:setGeometry](screenx, screeny, w+1, h+1)
 
-  # rescale w,h to contents size
-  w, h = size(widget[:contentsRect]()[:size]())
-  scene[:setSceneRect](-w/2, -h/2, w, h)
+  # w, h = size(widget[:contentsRect]()[:size]())
+  # scene[:setSceneRect](-w/2, -h/2, w, h)
 
   if show
     showwidget(widget)
   end
 
   s = Scene(widget, scene, SceneItem[])
+  recenterScene(s)
   currentScene!(s)
   s
+end
+
+# rescale w,h to contents size
+function recenterScene(scene::Scene)
+  w, h = size(scene.widget[:contentsRect]()[:size]())
+  scene.scene[:setSceneRect](-w/2, -h/2, w, h)
+  nothing
 end
 
 
@@ -70,20 +77,6 @@ background!(args...) = background!(currentScene(), args...)
 
 # -----------------------------------------------------------------------
 
-type CurrentScene
-  nullablescene::Nullable{Scene}
-end
-const CURRENT_SCENE = CurrentScene(Nullable{Scene}())
-
-function currentScene()
-  # create a new scene if it doesn't exist yet
-  isnull(CURRENT_SCENE.nullablescene) && currentScene!(Scene())
-  get(CURRENT_SCENE.nullablescene)
-end
-currentScene!(scene::Scene) = (CURRENT_SCENE.nullablescene = Nullable(scene))
-
-# -----------------------------------------------------------------------
-
 convertToRGBInt(x::Real) = max(0, min(round(Int, x * 255.0), 255))
 
 makecolor(color::Symbol) = QT.QColor(string(color))
@@ -92,6 +85,28 @@ makecolor(args...) = QT.QColor(map(convertToRGBInt, args)...)  # args: r, g, b [
 
 makebrush(args...) = QT.QBrush(makecolor(args...))
 makepen(width::Real, args...) = width == 0 ? QT.QPen(0) : QT.QPen(makecolor(args...), float(width))
+
+# -----------------------------------------------------------------------
+
+type CurrentScene
+  nullablescene::Nullable{Scene}
+  defaultBrush::PyObject
+  defaultPen::PyObject
+end
+const CURRENT_SCENE = CurrentScene(Nullable{Scene}(), makebrush(:black), makepen(2, :black))
+
+function currentScene()
+  # create a new scene if it doesn't exist yet
+  isnull(CURRENT_SCENE.nullablescene) && currentScene!(Scene())
+  get(CURRENT_SCENE.nullablescene)
+end
+currentScene!(scene::Scene) = (CURRENT_SCENE.nullablescene = Nullable(scene))
+
+defaultBrush() = CURRENT_SCENE.defaultBrush
+defaultPen() = CURRENT_SCENE.defaultPen
+defaultBrush!(args...) = (CURRENT_SCENE.defaultBrush = makebrush(args...); nothing)
+defaultPen!(args...) = (CURRENT_SCENE.defaultPen = makepen(args...); nothing)
+
 
 # -----------------------------------------------------------------------
 
@@ -138,6 +153,8 @@ function Ellipse(radius::P2, pos::Point = ORIGIN)
   rx, ry = radius
   item = Ellipse(QT.QGraphicsEllipseItem(-rx, -ry, rx*2.0, ry*2.0))
   position!(item, pos)
+  brush!(item, defaultBrush())
+  pen!(item, defaultPen())
   item
 end
 Circle(radius::Real, center::Point = ORIGIN) = Ellipse(P2(radius, radius), center)
@@ -154,6 +171,8 @@ function Rect(sz::P2, pos::Point = ORIGIN)
   w, h = sz
   item = Rect(QT.QGraphicsRectItem(-w/2, -h/2, w, h))
   position!(item, pos)
+  brush!(item, defaultBrush())
+  pen!(item, defaultPen())
   item
 end
 Square(w::Real, pos::Point = ORIGIN) = Rect(P2(w, w), pos)
@@ -169,6 +188,8 @@ immutable SceneText <: SceneItem; o::PyObject; end
 function SceneText(s::String, pos::Point = ORIGIN)
   item = SceneText(QT.QGraphicsSimpleTextItem(s))
   position!(item, pos)
+  brush!(item, defaultBrush())
+  pen!(item, defaultPen())
   item
 end
 
