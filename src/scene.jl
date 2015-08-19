@@ -188,13 +188,22 @@ immutable SceneText <: SceneItem; o::PyObject; end
 function SceneText(s::String, pos::Point = ORIGIN)
   item = SceneText(QT.QGraphicsSimpleTextItem(s))
   position!(item, pos)
-  brush!(item, defaultBrush())
-  pen!(item, defaultPen())
+  # brush!(item, defaultBrush())
+  # pen!(item, defaultPen())
   item
 end
 
 text!(scene::Scene, args...) = push!(scene, SceneText(args...))
 text!(args...) = text!(currentScene(), args...)
+
+Base.size(item::SceneText) = size(item.o[:boundingRect]()[:size]())
+Base.position(item::SceneText) = position(item.o[:boundingRect]()[:pos]()) + size(item)/2
+function position!(item::SceneText, p::P2)
+  p = p - size(item)/2
+  item.o[:setPos](p...)
+  item
+end
+settext(item::SceneText, s::String) = (item.o[:setText](s); item)
 
 # -----------------------------------------------------------------------
 

@@ -97,6 +97,7 @@ export plot,
        scalex!,
        scaley!,
        rotate!,
+       settext,
 
        ellipse!,
        circle!,
