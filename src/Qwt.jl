@@ -1,127 +1,138 @@
 
 
-
 module Qwt
 
+# VERSION >= v"0.4.0-dev+6521" && __precompile__()
+__precompile__(false)
 
-export plot,
-       oplot,
-       subplot,
-       scatter,
-       heatmap,
 
-       currentPlot,
-       currentPlot!,
+export 
+  plot,
+  oplot,
+  subplot,
+  scatter,
+  heatmap,
 
-       getline,
-       setdata,
-       addRegressionLine,
-       refresh,
-       title,
-       xlabel,
-       ylabel,
-       yrightlabel,
-       windowtitle,
+  currentPlot,
+  currentPlot!,
 
-       Widget,
-       PlotWidget,
+  getline,
+  setdata,
+  addRegressionLine,
+  refresh,
+  title,
+  xlabel,
+  ylabel,
+  yrightlabel,
+  windowtitle,
 
-       hidewidget,
-       showwidget,
-       widgetpos,
-       widgetsize,
-       movewidget,
-       resizewidget,
-       move_resizewidget,
-       screenCount,
-       screenPosition,
-       screenSize,
-       moveToScreen,
-       moveToLastScreen,
+  Widget,
+  PlotWidget,
 
-       Layout,
-       Splitter,
-       vbox,
-       hbox,
-       vsplitter,
-       hsplitter,
+  hidewidget,
+  showwidget,
+  widgetpos,
+  widgetsize,
+  movewidget,
+  resizewidget,
+  move_resizewidget,
+  screenCount,
+  screenPosition,
+  screenSize,
+  moveToScreen,
+  moveToLastScreen,
 
-       savepng,
-       animation,
-       saveframe,
-       makegif,
+  Layout,
+  Splitter,
+  vbox,
+  hbox,
+  vsplitter,
+  hsplitter,
 
-       P2, # 2D point
-       P3, # 3D point
-       Point,
-       ORIGIN,
-       Scene,
-       SceneItem,
-       Ellipse,
-       Circle,
-       Rect,
-       Square,
-       SceneText,
-       Line,
+  savepng,
+  animation,
+  saveframe,
+  makegif,
 
-       currentScene,
-       currentScene!,
-       defaultBrush,
-       defaultBrush!,
-       defaultPen,
-       defaultPen!,
-       top,
-       bottom,
-       left,
-       right,
-       topleft,
-       bottomright,
-       background!,
+  P2, # 2D point
+  P3, # 3D point
+  Point,
+  ORIGIN,
+  Scene,
+  SceneItem,
+  Ellipse,
+  Circle,
+  Rect,
+  Square,
+  SceneText,
+  Line,
 
-       makecolor,
-       makebrush,
-       makepen,
-       position3d,
-       position!,
-       zvalue,
-       zvalue!,
-       rotation,
-       rotation!,
-       visible,
-       visible!,
-       parent,
-       parent!,
-       brush!,
-       pen!,
-       move!,
-       movex!,
-       movey!,
-       scale!,
-       scalex!,
-       scaley!,
-       rotate!,
-       settext,
+  currentScene,
+  currentScene!,
+  defaultBrush,
+  defaultBrush!,
+  defaultPen,
+  defaultPen!,
+  top,
+  bottom,
+  left,
+  right,
+  topleft,
+  bottomright,
+  background!,
 
-       ellipse!,
-       circle!,
-       rect!,
-       square!,
-       text!,
-       line!
+  makecolor,
+  makebrush,
+  makepen,
+  position3d,
+  position!,
+  zvalue,
+  zvalue!,
+  rotation,
+  rotation!,
+  visible,
+  visible!,
+  parent,
+  parent!,
+  brush!,
+  pen!,
+  move!,
+  movex!,
+  movey!,
+  scale!,
+  scalex!,
+  scaley!,
+  rotate!,
+  settext,
+
+  ellipse!,
+  circle!,
+  rect!,
+  square!,
+  text!,
+  line!
 
 # ------------------------------------------------------
 # Setup Qt
 # ------------------------------------------------------
-print("Initializing Qwt... ")
+
 using PyCall
-unshift!(PyVector(pyimport("sys")["path"]), "")  # so you can load python files from the current directory
+
+# function __init__()
+print("Initializing Qwt... ")
+# global QT, PLOT, WIDGETS, QAPP
 @pyimport PyQt4.Qt as QT
 @pyimport BasicPlot as PLOT
 @pyimport pythonwidgets as WIDGETS
-@pyimport FancyPlot as FPLOT
+# QT = QT2
+# PLOT = PLOT2
+# WIDGETS = WIDGETS2
+# unshift!(PyVector(pyimport("sys")["path"]), "")  # so you can load python files from the current directory
+# @pyimport FancyPlot as FPLOT
 pygui_start(:qt_pyqt4)
 const QAPP = QT.QApplication([])
 println("done.")
+# end
 # ------------------------------------------------------
 
 
