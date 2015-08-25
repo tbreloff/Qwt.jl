@@ -10,6 +10,9 @@ export plot,
        scatter,
        heatmap,
 
+       currentPlot,
+       currentPlot!,
+
        getline,
        setdata,
        addRegressionLine,

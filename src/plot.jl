@@ -60,8 +60,22 @@ xlabel(plt::Plot, label::String) = plt.widget[:setXAxisTitle](label)
 ylabel(plt::Plot, label::String) = plt.widget[:setYAxisTitle](label)
 yrightlabel(plt::Plot, label::String) = plt.widget[:setYAxisTitleRight](label)
 
+# ----------------------------------------------------------------
 
-########################################################################################
+type CurrentPlot
+  nullableplot::Nullable{Plot}
+end
+const CURRENT_PLOT = CurrentPlot(Nullable{Plot}())
+
+function currentPlot()
+  # create a new plot if it doesn't exist yet
+  isnull(CURRENT_PLOT.nullableplot) && currentPlot!(Plot())
+  get(CURRENT_PLOT.nullableplot)
+end
+currentPlot!(plot::Plot) = (CURRENT_PLOT.nullableplot = Nullable(plot))
+
+
+# ----------------------------------------------------------------
 
 # kvs is a list of (key,value) tuples, where key is a Symbol.
 # valid keys: 
@@ -191,6 +205,7 @@ end
 oplot(plt::PlotWidget, y::AbstractArray; kvs...) = oplot(plt; y = y, kvs...)
 oplot(plt::PlotWidget, x::AbstractArray, y::AbstractArray; kvs...) = oplot(plt; x = x, y = y, kvs...)
 oplot(plt::PlotWidget, f::Function, x::AbstractArray; kvs...) = oplot(plt; x = x, y = map(f, x), kvs...)
+oplot(args...; kwargs...) = oplot(currentPlot(), args...; kwargs...)
 
 # generic way to add to plot
 function oplot(plotwidget::PlotWidget; kvs...)
@@ -256,10 +271,12 @@ plot(y::AbstractArray; kvs...) = plot(; y = y, kvs...)
 plot(x::AbstractArray, y::AbstractArray; kvs...) = plot(; x = x, y = y, kvs...)
 plot(f::Function, x::AbstractArray; kvs...) = plot(; x = x, y = map(f, x), kvs...)
 
+# plot!(plt::PlotWidget, )
 
 function plot(; kvs...)
   
   plt = Plot()
+  currentPlot!(plt)
   resizewidget(plt, 800, 600)
   moveToLastScreen(plt)  # partial hack so it goes to my center monitor... sorry
 
