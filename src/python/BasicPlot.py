@@ -150,11 +150,14 @@ class BasicPlot(Qwt.QwtPlot):
 
         self.setCanvasBackground(Qt.Qt.gray)
 
-        legend = Qwt.QwtLegend()
-        legend.setItemMode(Qwt.QwtLegend.ClickableItem)
+        self.legend = Qwt.QwtLegend()
+        self.legend.setItemMode(Qwt.QwtLegend.ClickableItem)
         # Qt.QObject.connect(self, Qt.SIGNAL("legendClicked(QwtPlotItem*)"), self.legendclick)
         self.legendClicked.connect(self.legendclick)
-        self.insertLegend(legend, Qwt.QwtPlot.BottomLegend);
+        # self.insertLegend(self.legend, Qwt.QwtPlot.BottomLegend);
+
+        self.legendShown = False
+        self.showLegend()
 
         # legend
         #legend = Qwt.QwtLegend()
@@ -174,6 +177,20 @@ class BasicPlot(Qwt.QwtPlot):
         self.zoomers = []
         self.__initZooming()
         self.__initPanning()
+
+    def hideLegend(self):
+        if self.legendShown:
+            self.insertLegend(None)
+            self.legendShown = False
+
+    def showLegend(self):
+        if not self.legendShown:
+            self.legend = Qwt.QwtLegend()
+            self.legend.setItemMode(Qwt.QwtLegend.ClickableItem)
+            self.legendClicked.connect(self.legendclick)
+            self.insertLegend(self.legend, Qwt.QwtPlot.BottomLegend)
+            self.legendShown = True
+
 
     def legendclick(self, item):
         if item.isVisible():

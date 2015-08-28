@@ -59,6 +59,8 @@ title(plt::Plot, title::String) = plt.widget[:setPlotTitle](title)
 xlabel(plt::Plot, label::String) = plt.widget[:setXAxisTitle](label)
 ylabel(plt::Plot, label::String) = plt.widget[:setYAxisTitle](label)
 yrightlabel(plt::Plot, label::String) = plt.widget[:setYAxisTitleRight](label)
+hidelegend(plt::Plot) = plt.widget[:hideLegend]()
+showlegend(plt::Plot) = plt.widget[:showLegend]()
 
 # ----------------------------------------------------------------
 
@@ -116,6 +118,7 @@ const DEFAULT_title = ""
 const DEFAULT_xlabel = ""
 const DEFAULT_ylabel = ""
 const DEFAULT_yrightlabel = ""
+const DEFAULT_legend = true
 
 
 makematrix(i::Int) = zeros(Float64, 0, i)
@@ -180,6 +183,7 @@ function addline(plt::Plot, x, y, axis::Symbol, color::Symbol, label::String, wi
   xlab != "" && xlabel(plt, xlab)
   ylab != "" && ylabel(plt, ylab)
   yrightlab != "" && yrightlabel(plt, yrightlab)
+
 
   # add it to the figure
   if isheatmap
@@ -257,6 +261,10 @@ function updateWindow(plotwidget::PlotWidget, d::Dict)
     moveToScreen(plotwidget, d[:screen])
   elseif haskey(d, :pos)
     movewidget(plotwidget, d[:pos])
+  end
+
+  if haskey(d, :legend)
+    d[:legend] ? showlegend(plotwidget) : hidelegend(plotwidget)
   end
 
   refresh(plotwidget)

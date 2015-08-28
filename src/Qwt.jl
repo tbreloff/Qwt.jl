@@ -25,9 +25,12 @@ export
   ylabel,
   yrightlabel,
   windowtitle,
+  hidelegend,
+  showlegend,
 
   Widget,
   PlotWidget,
+  Plot,
 
   hidewidget,
   showwidget,
