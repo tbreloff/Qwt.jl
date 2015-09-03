@@ -122,7 +122,7 @@ export
 using PyCall
 
 # function __init__()
-print("Initializing Qwt... ")
+# print("Initializing Qwt... ")
 # global QT, PLOT, WIDGETS, QAPP
 @pyimport PyQt4.Qt as QT
 @pyimport BasicPlot as PLOT
@@ -134,7 +134,7 @@ print("Initializing Qwt... ")
 # @pyimport FancyPlot as FPLOT
 pygui_start(:qt_pyqt4)
 const QAPP = QT.QApplication([])
-println("done.")
+# println("done.")
 # end
 # ------------------------------------------------------
 
