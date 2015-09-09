@@ -173,7 +173,7 @@ function addline(plt::Plot, x, y, axis::Symbol, color, label::String, width::Int
   @assert linetype in LINE_TYPES
   @assert linestyle in LINE_STYLES
   @assert marker in LINE_MARKERS
-  @assert markercolor in COLORS
+  # @assert markercolor in COLORS
   @assert heatmap_n > 0
   @assert heatmap_c[1] >= 0.0 && heatmap_c[2] >= heatmap_c[1]
 
