@@ -150,11 +150,11 @@ class BasicPlot(Qwt.QwtPlot):
 
         self.setCanvasBackground(Qt.Qt.gray)
 
-        self.legend = Qwt.QwtLegend()
-        self.legend.setItemMode(Qwt.QwtLegend.ClickableItem)
-        # Qt.QObject.connect(self, Qt.SIGNAL("legendClicked(QwtPlotItem*)"), self.legendclick)
-        self.legendClicked.connect(self.legendclick)
-        # self.insertLegend(self.legend, Qwt.QwtPlot.BottomLegend);
+        # self.legend = Qwt.QwtLegend()
+        # self.legend.setItemMode(Qwt.QwtLegend.ClickableItem)
+        # # Qt.QObject.connect(self, Qt.SIGNAL("legendClicked(QwtPlotItem*)"), self.legendclick)
+        # self.legendClicked.connect(self.legendclick)
+        # # self.insertLegend(self.legend, Qwt.QwtPlot.BottomLegend);
 
         self.legendShown = False
         self.showLegend()

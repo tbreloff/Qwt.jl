@@ -7,12 +7,12 @@ type Series <: PlotItem
   axis::Symbol
   label::String
   idx::Int
-  color::Symbol
+  color
   plt
   x::Vector{Float64}
   y::Vector{Float64}
 
-  function Series(axis::Symbol, label::String, idx::Int, color::Symbol, plt)
+  function Series(axis::Symbol, label::String, idx::Int, color, plt)
     @assert axis in (:left, :right)
     new(axis, label, idx, color, plt, zeros(0), zeros(0))
   end

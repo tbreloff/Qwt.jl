@@ -119,6 +119,7 @@ export
 # Setup Qt
 # ------------------------------------------------------
 
+using Colors
 using PyCall
 
 # function __init__()
