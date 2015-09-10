@@ -158,8 +158,9 @@ end
 autocolor(idx::Integer) = COLORS[mod1(idx,NUMCOLORS)]
 
 # add one line to plot
-function addline(plt::Plot, x, y, axis::Symbol, color, label::String, width::Int, linetype::Symbol,
-                                   linestyle::Symbol, marker::Symbol, markercolor, markersize::Int, 
+function addline(plt::Plot, x, y, color, markercolor,
+                                   axis::Symbol, label::String, width::Int, linetype::Symbol,
+                                   linestyle::Symbol, marker::Symbol, markersize::Int, 
                                    heatmap_n::Int, heatmap_c::Tuple{Float64,Float64},
                                    tit::String, xlab::String, ylab::String, yrightlab::String, fillto)
   
@@ -259,10 +260,14 @@ function oplot(plotwidget::PlotWidget; kvs...)
     # convert RGB to QColor
     color = getarg(:color, d, c)
     if isa(color, Colors.RGB)
-      d[:color] = convertRGBToQColor(color)
+      color = convertRGBToQColor(color)
+    end
+    markercolor = getarg(:markercolor, d, c)
+    if isa(markercolor, Colors.RGB)
+      markercolor = convertRGBToQColor(markercolor)
     end
     
-    line = addline(plt, x, Y[:,c], [getarg(s,d,c) for s in (:axis, :color, :label, :width, :linetype, :linestyle, :marker, :markercolor, :markersize, :heatmap_n, :heatmap_c, :title, :xlabel, :ylabel, :yrightlabel, :fillto)]...)
+    line = addline(plt, x, Y[:,c], color, markercolor, [getarg(s,d,c) for s in (:axis, :label, :width, :linetype, :linestyle, :marker, :markersize, :heatmap_n, :heatmap_c, :title, :xlabel, :ylabel, :yrightlabel, :fillto)]...)
 
     if haskey(d, :reg)
       addRegressionLine(line)
