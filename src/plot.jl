@@ -269,7 +269,7 @@ function oplot(plotwidget::PlotWidget; kvs...)
     
     line = addline(plt, x, Y[:,c], color, markercolor, [getarg(s,d,c) for s in (:axis, :label, :width, :linetype, :linestyle, :marker, :markersize, :heatmap_n, :heatmap_c, :title, :xlabel, :ylabel, :yrightlabel, :fillto)]...)
 
-    if haskey(d, :reg)
+    if haskey(d, :reg) && d[:reg]
       addRegressionLine(line)
     end
   end
@@ -280,7 +280,7 @@ end
 
 function updateWindow(plotwidget::PlotWidget, d::Dict)
   if haskey(d, :size)
-    resizewidget(plotwidget, d[:size])
+    resizewidget(plotwidget, d[:size]...)
   end
   if haskey(d, :windowtitle)
     windowtitle(plotwidget, d[:windowtitle])
@@ -289,7 +289,7 @@ function updateWindow(plotwidget::PlotWidget, d::Dict)
   if haskey(d, :screen)
     moveToScreen(plotwidget, d[:screen])
   elseif haskey(d, :pos)
-    movewidget(plotwidget, d[:pos])
+    movewidget(plotwidget, d[:pos]...)
   end
 
   if haskey(d, :legend)
