@@ -62,6 +62,19 @@ yrightlabel(plt::Plot, label::String) = plt.widget[:setYAxisTitleRight](label)
 hidelegend(plt::Plot) = plt.widget[:hideLegend]()
 showlegend(plt::Plot) = plt.widget[:showLegend]()
 
+function background!(plt::Plot, color)
+  qcolor = convertRGBToQColor(color)
+
+  # set the background outside of the canvas
+  palette = plt.widget[:palette]()
+  palette[:setColor](10, qcolor)  # note: 10 is the value representing enum value QPalette::Window
+  plt.widget[:setPalette](palette)
+  plt.widget[:setAutoFillBackground](true)
+
+  # set the canvas background
+  plt.widget[:setCanvasBackground](qcolor)
+end
+
 # ----------------------------------------------------------------
 
 type CurrentPlot
@@ -113,6 +126,7 @@ const DEFAULT_markercolor = :auto
 const DEFAULT_markersize = 10
 const DEFAULT_heatmap_n = 100
 const DEFAULT_heatmap_c = (0.15, 0.5)
+const DEFAULT_fillto = nothing
 
 const DEFAULT_title = ""
 const DEFAULT_xlabel = ""
@@ -147,7 +161,7 @@ autocolor(idx::Integer) = COLORS[mod1(idx,NUMCOLORS)]
 function addline(plt::Plot, x, y, axis::Symbol, color, label::String, width::Int, linetype::Symbol,
                                    linestyle::Symbol, marker::Symbol, markercolor, markersize::Int, 
                                    heatmap_n::Int, heatmap_c::Tuple{Float64,Float64},
-                                   tit::String, xlab::String, ylab::String, yrightlab::String)
+                                   tit::String, xlab::String, ylab::String, yrightlab::String, fillto)
   
   leftaxis = axis == :left
   isheatmap = linetype == :heatmap
@@ -194,7 +208,7 @@ function addline(plt::Plot, x, y, axis::Symbol, color, label::String, width::Int
     plt.widget[:addHeatMap](leftaxis, string(label), heatmap_c...)
   else
     args = map(string, (label, linetype, linestyle, marker))
-    plt.widget[:addLine](leftaxis, width, markersize, color, args..., markercolor)
+    plt.widget[:addLine](leftaxis, width, markersize, color, args..., markercolor, fillto)
   end
 
   plotitem
@@ -248,7 +262,7 @@ function oplot(plotwidget::PlotWidget; kvs...)
       d[:color] = convertRGBToQColor(color)
     end
     
-    line = addline(plt, x, Y[:,c], [getarg(s,d,c) for s in (:axis, :color, :label, :width, :linetype, :linestyle, :marker, :markercolor, :markersize, :heatmap_n, :heatmap_c, :title, :xlabel, :ylabel, :yrightlabel)]...)
+    line = addline(plt, x, Y[:,c], [getarg(s,d,c) for s in (:axis, :color, :label, :width, :linetype, :linestyle, :marker, :markercolor, :markersize, :heatmap_n, :heatmap_c, :title, :xlabel, :ylabel, :yrightlabel, :fillto)]...)
 
     if haskey(d, :reg)
       addRegressionLine(line)
@@ -275,6 +289,10 @@ function updateWindow(plotwidget::PlotWidget, d::Dict)
 
   if haskey(d, :legend)
     d[:legend] ? showlegend(plotwidget) : hidelegend(plotwidget)
+  end
+
+  if haskey(d, :background_color)
+    background!(plotwidget, d[:background_color])
   end
 
   refresh(plotwidget)

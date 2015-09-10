@@ -148,7 +148,7 @@ class BasicPlot(Qwt.QwtPlot):
         self.curvesAxis1 = []
         self.curvesAxis2 = []
 
-        self.setCanvasBackground(Qt.Qt.gray)
+        self.setCanvasBackground(Qt.Qt.white)
 
         # self.legend = Qwt.QwtLegend()
         # self.legend.setItemMode(Qwt.QwtLegend.ClickableItem)
@@ -270,7 +270,7 @@ class BasicPlot(Qwt.QwtPlot):
         self.setAxisAutoScale(Qwt.QwtPlot.yLeft)
         self.setAxisAutoScale(Qwt.QwtPlot.yRight)
 
-    def addLine(self, left = True, width = 2, markersize = 10, color = "black", label = "y", linetype = "line", linestyle = "solid", marker = "none", markercolor = "black"):
+    def addLine(self, left = True, width = 2, markersize = 10, color = "black", label = "y", linetype = "line", linestyle = "solid", marker = "none", markercolor = "black", fillto = None):
         self.setAxisAutoScales()
         curve = Qwt.QwtPlotCurve(label)
         axis = Qwt.QwtPlot.yLeft if left else Qwt.QwtPlot.yRight
@@ -285,6 +285,9 @@ class BasicPlot(Qwt.QwtPlot):
             interiorBrush = Qt.QBrush(mcolor)
             borderPen = Qt.QPen(mcolor, 1, Qt.Qt.SolidLine)
             curve.setSymbol(Qwt.QwtSymbol(self.getMarkerType(marker), interiorBrush, borderPen, Qt.QSize(markersize,markersize)))
+        if fillto != None:
+            curve.setBrush(Qt.QColor(color))
+            curve.setBaseline(fillto)
         curve.attach(self)
 
         if left:
