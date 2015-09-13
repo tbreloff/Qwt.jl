@@ -1,10 +1,14 @@
 # Qwt.jl
-Plot using Qwt (currently through PyQwt)
+
+#### Author: Thomas Breloff (@tbreloff)
+
+Plotting using PyQt/PyQwt and a clean interface for 2D scenes using QCanvas.  Add to PyQt GUIs and compose many widgets
+together for complex visualizations.
 
 ## Install
 
-- Install python
-- Install PyQwt
+- Install python and PyQt4
+- Install PyQwt.  If you can't find a bundled package through brew, yum, apt-get, etc:
   - Download tar from: http://sourceforge.net/projects/pyqwt/files/pyqwt5/
   - cd <download_location>
   - tar -zxvf PyQwt-5.2.0.tar.gz
@@ -12,7 +16,8 @@ Plot using Qwt (currently through PyQwt)
   - python configure.py -Q ../qwt-5.2
   - make
   - sudo make install
-- Add the Qwt/src/python directory to your PYTHONPATH environment variable
+
+__Tip__: On OS X, `brew install pyqt` and `brew install pyqwt` might be all you need.
 
 
 ## Zooming
