@@ -119,23 +119,28 @@ export
 # Setup Qt
 # ------------------------------------------------------
 
-using Colors
-using PyCall
-
-# function __init__()
-# print("Initializing Qwt... ")
-# global QT, PLOT, WIDGETS, QAPP
-@pyimport PyQt4.Qt as QT
-
+# add the python dir to PYTHONPATH
 qwtPythonDir = "$(Pkg.dir("Qwt"))/src/python"
 try
     ENV["PYTHONPATH"] = ENV["PYTHONPATH"] * ":" * qwtPythonDir
 catch
     ENV["PYTHONPATH"] = qwtPythonDir
 end
-@pyimport BasicPlot as PLOT
 
+using Colors
+using PyCall
+
+# function __init__()
+# print("Initializing Qwt... ")
+# global QT, PLOT, WIDGETS, QAPP
+
+# set the PYTHONPATH
+unshift!(PyVector(pyimport("sys")["path"]), "")
+
+@pyimport PyQt4.Qt as QT
+@pyimport BasicPlot as PLOT
 @pyimport pythonwidgets as WIDGETS
+
 # QT = QT2
 # PLOT = PLOT2
 # WIDGETS = WIDGETS2
