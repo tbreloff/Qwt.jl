@@ -126,7 +126,15 @@ using PyCall
 # print("Initializing Qwt... ")
 # global QT, PLOT, WIDGETS, QAPP
 @pyimport PyQt4.Qt as QT
+
+qwtPythonDir = "$(Pkg.dir("Qwt"))/src/python"
+try
+    ENV["PYTHONPATH"] = ENV["PYTHONPATH"] * ":" * qwtPythonDir
+catch
+    ENV["PYTHONPATH"] = qwtPythonDir
+end
 @pyimport BasicPlot as PLOT
+
 @pyimport pythonwidgets as WIDGETS
 # QT = QT2
 # PLOT = PLOT2
