@@ -1,6 +1,10 @@
 import sys,os,datetime
 import locale
-locale.setlocale(locale.LC_ALL, 'en_US')
+try:
+    # TODO: something more general
+    locale.setlocale(locale.LC_ALL, 'en_US')
+except:
+    pass
 
 def pstr(val, digits = 0):
     if digits == None:
