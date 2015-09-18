@@ -80,7 +80,7 @@ background!(args...) = background!(currentScene(), args...)
 convertToRGBInt(x::Real) = max(0, min(round(Int, x * 255.0), 255))
 
 makecolor(color::Symbol) = QT.QColor(string(color))
-makecolor(color::String) = QT.QColor(color)
+makecolor(color::AbstractString) = QT.QColor(color)
 makecolor(args...) = QT.QColor(map(convertToRGBInt, args)...)  # args: r, g, b [, a]
 
 makebrush(args...) = QT.QBrush(makecolor(args...))
@@ -185,7 +185,7 @@ square!(args...) = square!(currentScene(), args...)
 # -----------------------------------------------------------------------
 
 immutable SceneText <: SceneItem; o::PyObject; end
-function SceneText(s::String, pos::Point = ORIGIN)
+function SceneText(s::AbstractString, pos::Point = ORIGIN)
   item = SceneText(QT.QGraphicsSimpleTextItem(s))
   position!(item, pos)
   # brush!(item, defaultBrush())
@@ -203,7 +203,7 @@ function position!(item::SceneText, p::P2)
   item.o[:setPos](p...)
   item
 end
-settext(item::SceneText, s::String) = (item.o[:setText](s); item)
+settext(item::SceneText, s::AbstractString) = (item.o[:setText](s); item)
 
 # -----------------------------------------------------------------------
 

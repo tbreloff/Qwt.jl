@@ -55,10 +55,10 @@ getline(plt::Plot, c::Int) = plt.lines[c]
 
 
 
-title(plt::Plot, title::String) = plt.widget[:setPlotTitle](title)
-xlabel(plt::Plot, label::String) = plt.widget[:setXAxisTitle](label)
-ylabel(plt::Plot, label::String) = plt.widget[:setYAxisTitle](label)
-yrightlabel(plt::Plot, label::String) = plt.widget[:setYAxisTitleRight](label)
+title(plt::Plot, title::AbstractString) = plt.widget[:setPlotTitle](title)
+xlabel(plt::Plot, label::AbstractString) = plt.widget[:setXAxisTitle](label)
+ylabel(plt::Plot, label::AbstractString) = plt.widget[:setYAxisTitle](label)
+yrightlabel(plt::Plot, label::AbstractString) = plt.widget[:setYAxisTitleRight](label)
 hidelegend(plt::Plot) = plt.widget[:hideLegend]()
 showlegend(plt::Plot) = plt.widget[:showLegend]()
 
@@ -159,10 +159,10 @@ autocolor(idx::Integer) = COLORS[mod1(idx,NUMCOLORS)]
 
 # add one line to plot
 function addline(plt::Plot, x, y, color, markercolor,
-                                   axis::Symbol, label::String, width::Int, linetype::Symbol,
+                                   axis::Symbol, label::AbstractString, width::Int, linetype::Symbol,
                                    linestyle::Symbol, marker::Symbol, markersize::Int, 
                                    heatmap_n::Int, heatmap_c::Tuple{Float64,Float64},
-                                   tit::String, xlab::String, ylab::String, yrightlab::String, fillto)
+                                   tit::AbstractString, xlab::AbstractString, ylab::AbstractString, yrightlab::AbstractString, fillto)
   
   leftaxis = axis == :left
   isheatmap = linetype == :heatmap

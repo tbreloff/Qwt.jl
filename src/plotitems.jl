@@ -5,14 +5,14 @@ abstract PlotItem
 
 type Series <: PlotItem
   axis::Symbol
-  label::String
+  label::AbstractString
   idx::Int
   color
   plt
   x::Vector{Float64}
   y::Vector{Float64}
 
-  function Series(axis::Symbol, label::String, idx::Int, color, plt)
+  function Series(axis::Symbol, label::AbstractString, idx::Int, color, plt)
     @assert axis in (:left, :right)
     new(axis, label, idx, color, plt, zeros(0), zeros(0))
   end
@@ -55,7 +55,7 @@ getreglinecolor(line::Series) = line.color
 
 type HeatMap <: PlotItem
   axis::Symbol
-  label::String
+  label::AbstractString
   idx::Int
   x::Vector{Float64}
   y::Vector{Float64}
@@ -63,7 +63,7 @@ type HeatMap <: PlotItem
   n::Int
   plt
 
-  function HeatMap(axis::Symbol, label::String, idx::Int, n::Int, plt)
+  function HeatMap(axis::Symbol, label::AbstractString, idx::Int, n::Int, plt)
     @assert axis in (:left, :right)
     new(axis, label, idx, zeros(0), zeros(0), true, n, plt)
   end
