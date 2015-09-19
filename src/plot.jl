@@ -62,17 +62,40 @@ yrightlabel(plt::Plot, label::AbstractString) = plt.widget[:setYAxisTitleRight](
 hidelegend(plt::Plot) = plt.widget[:hideLegend]()
 showlegend(plt::Plot) = plt.widget[:showLegend]()
 
-function background!(plt::Plot, color)
-  qcolor = convertRGBToQColor(color)
 
-  # set the background outside of the canvas
+# QwtScaleWidget *qwtsw = myqwtplot.axisWidget(QwtPlot::xBottom); 
+#   QPalette palette = qwtsw->palette();  
+#   palette.setColor( QPalette::WindowText, Qt::gray);  // for ticks
+#   palette.setColor( QPalette::Text, Qt::gray);                  // for ticks' labels
+#   qwtsw->setPalette( palette );
+
+function updatePalette(plt::Plot, color, isbackground::Bool)
+  qcolor = convertRGBToQColor(color)
   palette = plt.widget[:palette]()
-  palette[:setColor](10, qcolor)  # note: 10 is the value representing enum value QPalette::Window
+
+  # note: 0 is for QPalette::WindowText, which is the foreground (axis borders, ticks),
+  #       6 is for QPalette::Text
+  #       10 is for QPalette::Window, which is background color (outside of axis canvas)
+  enumvals = isbackground ? [10] : [0,6]
+  for enumval in enumvals
+    palette[:setColor](enumval, qcolor)
+  end
   plt.widget[:setPalette](palette)
   plt.widget[:setAutoFillBackground](true)
 
-  # set the canvas background
-  plt.widget[:setCanvasBackground](qcolor)
+  if isbackground
+    plt.widget[:setCanvasBackground](qcolor)
+  end
+end
+
+
+function foreground!(plt::Plot, color)
+  updatePalette(plt, color, false)
+end
+
+
+function background!(plt::Plot, color)
+  updatePalette(plt, color, true)
 end
 
 # ----------------------------------------------------------------
@@ -298,6 +321,9 @@ function updateWindow(plotwidget::PlotWidget, d::Dict)
 
   if haskey(d, :background_color)
     background!(plotwidget, d[:background_color])
+  end
+  if haskey(d, :foreground_color)
+    foreground!(plotwidget, d[:foreground_color])
   end
 
   refresh(plotwidget)

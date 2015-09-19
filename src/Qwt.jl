@@ -83,6 +83,7 @@ export
   topleft,
   bottomright,
   background!,
+  foreground!,
 
   makecolor,
   makebrush,
