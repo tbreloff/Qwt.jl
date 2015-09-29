@@ -8,9 +8,11 @@ type Plot <: PlotWidget
   lines::Vector{PlotItem}
   numLeft::Int
   numRight::Int
+  autoscale_x::Bool
+  autoscale_y::Bool
 end
 
-Plot() = Plot(PLOT.BasicPlot(), PlotItem[], 0, 0)
+Plot() = Plot(PLOT.BasicPlot(), PlotItem[], 0, 0, true, true)
 
 Base.string(plt::Plot) = "Plot{lines=$(plt.lines)}"
 Base.print(io::IO, plt::Plot) = print(io, string(plt))
@@ -31,7 +33,7 @@ end
 # refreshes the plot object
 function refresh(plt::Plot)
 
-  plt.widget[:startUpdate]()
+  plt.widget[:startUpdate](plt.autoscale_x, plt.autoscale_y)
 
   for l in plt.lines
     ca = get(plt.widget[isleft(l) ? "curvesAxis1" : "curvesAxis2"], l.idx-1)
@@ -40,6 +42,7 @@ function refresh(plt::Plot)
   end
   
   plt.widget[:finishUpdate]()
+  # plt.widget[:replot]()
 
   nothing
 end

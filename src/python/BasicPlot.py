@@ -313,9 +313,15 @@ class BasicPlot(Qwt.QwtPlot):
             self.curvesAxis2.append(spectrogram)
 
 
-    def startUpdate(self):
-        for axis in [Qwt.QwtPlot.xBottom, Qwt.QwtPlot.xTop, Qwt.QwtPlot.yLeft, Qwt.QwtPlot.yRight]:
-            self.setAxisAutoScale(axis)
+    def startUpdate(self, autox = True, autoy = True):
+        if autox:
+            self.setAxisAutoScale(Qwt.QwtPlot.xBottom)
+            self.setAxisAutoScale(Qwt.QwtPlot.xTop)
+        if autoy:
+            self.setAxisAutoScale(Qwt.QwtPlot.yLeft)
+            self.setAxisAutoScale(Qwt.QwtPlot.yRight)
+        # for axis in [Qwt.QwtPlot.xBottom, Qwt.QwtPlot.xTop, Qwt.QwtPlot.yLeft, Qwt.QwtPlot.yRight]:
+        #     self.setAxisAutoScale(axis)
 
     def finishUpdate(self):
         for zoomer in self.zoomers:

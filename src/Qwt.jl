@@ -139,6 +139,7 @@ using PyCall
 unshift!(PyVector(pyimport("sys")["path"]), "")
 
 @pyimport PyQt4.Qt as QT
+@pyimport PyQt4.Qwt5 as QWT
 @pyimport BasicPlot as PLOT
 @pyimport pythonwidgets as WIDGETS
 
