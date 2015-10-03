@@ -159,7 +159,7 @@ using ImmutableArrays
 
 typealias P2 Vector2{Float64}
 typealias P3 Vector3{Float64}
-typealias Point Union(P2,P3)
+typealias Point Union{P2,P3}
 
 const ORIGIN = P3(0,0,0)
 

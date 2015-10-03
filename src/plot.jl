@@ -163,7 +163,7 @@ const DEFAULT_legend = true
 
 makematrix(i::Int) = zeros(Float64, 0, i)
 makematrix{T<:Number}(z::Matrix{T}) = convert(Matrix{Float64}, z)
-makematrix{T<:Number}(z::Union(StepRange{T,T},UnitRange{T},FloatRange{T},Vector{T})) = convert(Matrix{Float64}, reshape(z, length(z), 1))
+makematrix{T<:Number}(z::Union{StepRange{T,T},UnitRange{T},FloatRange{T},Vector{T}}) = convert(Matrix{Float64}, reshape(z, length(z), 1))
 buildX(Y::Matrix{Float64}) = makematrix(1:size(Y,1))
 
 makeplural(s::Symbol) = Symbol(string(s,"s"))
