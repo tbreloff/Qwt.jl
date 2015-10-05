@@ -60,12 +60,13 @@ type HeatMap <: PlotItem
   x::Vector{Float64}
   y::Vector{Float64}
   recalcOnUpdate::Bool
-  n::Int
+  nx::Int
+  ny::Int
   plt
 
-  function HeatMap(axis::Symbol, label::AbstractString, idx::Int, n::Int, plt)
+  function HeatMap(axis::Symbol, label::AbstractString, idx::Int, nx::Int, ny::Int, plt)
     @assert axis in (:left, :right)
-    new(axis, label, idx, zeros(0), zeros(0), true, n, plt)
+    new(axis, label, idx, zeros(0), zeros(0), true, nx, ny, plt)
   end
 end
 
@@ -95,7 +96,7 @@ end
 
 function updateWidgetData(heatmap::HeatMap, pyobj::PyObject)
   if heatmap.recalcOnUpdate
-    heatMapData = PLOT.HeatMapData(heatmap.x, heatmap.y, heatmap.n)
+    heatMapData = PLOT.HeatMapData(heatmap.x, heatmap.y, heatmap.nx, heatmap.ny)
     pyobj[:setData](heatMapData)
     recalcOnUpdate = false
   end

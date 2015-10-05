@@ -171,6 +171,10 @@ makedefault(s::Symbol) = Symbol(string("DEFAULT_",s))
 
 convertRGBToQColor(rgb::RGB) = QT.QColor(Float64[f(rgb)*255 for f in (red,green,blue)]...)
 
+"duplicate a single value, or pass the 2-tuple through"
+maketuple(x::Real) = (x,x)
+maketuple{T,S}(x::Tuple{T,S}) = x
+
 # get the corresponding plural arg, or the regular arg, or the default
 # example: if :colors is set, then grab the i_th color, otherwise if :color is set, return that color, otherwise return the default :auto
 function getarg(s::Symbol, d::Dict, c::Int)
@@ -187,7 +191,7 @@ autocolor(idx::Integer) = COLORS[mod1(idx,NUMCOLORS)]
 function addline(plt::Plot, x, y, color, markercolor,
                                    axis::Symbol, label::AbstractString, width::Int, linetype::Symbol,
                                    linestyle::Symbol, marker::Symbol, markersize::Int, 
-                                   heatmap_n::Int, heatmap_c::Tuple{Float64,Float64},
+                                   heatmap_n, heatmap_c::Tuple{Float64,Float64},
                                    tit::AbstractString, xlab::AbstractString, ylab::AbstractString, yrightlab::AbstractString, fillto)
   
   leftaxis = axis == :left
@@ -215,11 +219,13 @@ function addline(plt::Plot, x, y, color, markercolor,
   @assert linestyle in LINE_STYLES
   @assert marker in LINE_MARKERS
   # @assert markercolor in COLORS
-  @assert heatmap_n > 0
+  # @assert heatmap_n > 0
   @assert heatmap_c[1] >= 0.0 && heatmap_c[2] >= heatmap_c[1]
 
+  heatmap_nx, heatmap_ny = maketuple(heatmap_n)
+
   # create a new plotitem
-  plotitem = (isheatmap ? HeatMap(axis, label, idx, heatmap_n, plt) : Series(axis, label, idx, color, plt))
+  plotitem = (isheatmap ? HeatMap(axis, label, idx, heatmap_nx, heatmap_ny, plt) : Series(axis, label, idx, color, plt))
 
   setdata(plotitem, x, y)
   push!(plt.lines, plotitem)

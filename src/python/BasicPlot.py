@@ -82,12 +82,13 @@ def getcolormap(yellowCutoff = 0.15, orangeCutoff = 0.5):
 
 
 class HeatMapData(Qwt.QwtRasterData):
-    def __init__(self, x, y, n):
+    def __init__(self, x, y, nx, ny):
         Qwt.QwtRasterData.__init__(self, Qt.QRectF(min(x), min(y), max(x)-min(x), max(y)-min(y)))
 
         self.x = x
         self.y = y
-        self.n = n
+        self.nx = nx
+        self.ny = ny
 
         self.minx = min(x)
         self.miny = min(y)
@@ -97,23 +98,32 @@ class HeatMapData(Qwt.QwtRasterData):
         # print self.minx, self.miny, self.maxx, self.maxy
 
         # self.n = 200 # number of rows/cols
-        self.zmat = np.zeros((self.n, self.n))
+        self.zmat = np.zeros((self.nx, self.ny))
         for i in range(len(x)):
-            xidx = self.getIndex(x[i], self.minx, self.maxx)
-            yidx = self.getIndex(y[i], self.miny, self.maxy)
+            xidx = self.getIndexX(x[i], self.minx, self.maxx)
+            yidx = self.getIndexY(y[i], self.miny, self.maxy)
             self.zmat[xidx,yidx] += 1.0
 
         # now scale the matrix down by the max
         self.zmat /= np.max(self.zmat)
 
-    def getIndex(self, v, minv, maxv):
+    def getIndexX(self, v, minv, maxv):
         if v >= maxv:
-            return self.n - 1
+            return self.nx - 1
         elif v <= minv:
             return 0
 
         ratio = (v - minv) / (maxv - minv)
-        return int(self.n * ratio)
+        return int(self.nx * ratio)
+
+    def getIndexY(self, v, minv, maxv):
+        if v >= maxv:
+            return self.ny - 1
+        elif v <= minv:
+            return 0
+
+        ratio = (v - minv) / (maxv - minv)
+        return int(self.ny * ratio)
 
     # i think this returns the z-range
     def range(self):
@@ -122,15 +132,15 @@ class HeatMapData(Qwt.QwtRasterData):
 
     def copy(self):
         # print "copy"
-        return HeatMapData(self.x, self.y, self.n)
+        return HeatMapData(self.x, self.y, self.nx, self.ny)
 
     def value(self, x, y):
         # print "value", x, y
         if x < self.minx or x > self.maxx or y < self.miny or y > self.maxy:
             return 0.0
 
-        xidx = self.getIndex(x, self.minx, self.maxx)
-        yidx = self.getIndex(y, self.miny, self.maxy)
+        xidx = self.getIndexX(x, self.minx, self.maxx)
+        yidx = self.getIndexY(y, self.miny, self.maxy)
         # print "idx", xidx, yidx
         return self.zmat[xidx, yidx]
 
