@@ -153,6 +153,7 @@ const DEFAULT_markersize = 10
 const DEFAULT_heatmap_n = 100
 const DEFAULT_heatmap_c = (0.15, 0.5)
 const DEFAULT_fillto = nothing
+const DEFAULT_fillcolor = :auto
 
 const DEFAULT_title = ""
 const DEFAULT_xlabel = ""
@@ -170,6 +171,7 @@ makeplural(s::Symbol) = Symbol(string(s,"s"))
 makedefault(s::Symbol) = Symbol(string("DEFAULT_",s))
 
 convertRGBToQColor(rgb::RGB) = QT.QColor(Float64[f(rgb)*255 for f in (red,green,blue)]...)
+convertRGBToQColor(color::Colorant) = QT.QColor(Float64[f(color)*255 for f in (red,green,blue,alpha)]...)
 
 "duplicate a single value, or pass the 2-tuple through"
 maketuple(x::Real) = (x,x)
@@ -188,7 +190,7 @@ end
 autocolor(idx::Integer) = COLORS[mod1(idx,NUMCOLORS)]
 
 # add one line to plot
-function addline(plt::Plot, x, y, color, markercolor,
+function addline(plt::Plot, x, y, color, markercolor, fillcolor,
                                    axis::Symbol, label::AbstractString, width::Int, linetype::Symbol,
                                    linestyle::Symbol, marker::Symbol, markersize::Int, 
                                    heatmap_n, heatmap_c::Tuple{Float64,Float64},
@@ -207,6 +209,7 @@ function addline(plt::Plot, x, y, color, markercolor,
 
   color = (isa(color, Symbol) ? (color == :auto ? autocolor(idx) : string(color)) : color)
   markercolor = (isa(markercolor, Symbol) ? (markercolor == :auto ? autocolor(idx) : string(markercolor)) : markercolor)
+  fillcolor = (isa(fillcolor, Symbol) ? (fillcolor == :auto ? autocolor(idx) : string(fillcolor)) : fillcolor)
   label = string(label == "AUTO" ? "y_$idx" : label, leftaxis ? "" : " (R)")
 
   # println(color)
@@ -241,7 +244,7 @@ function addline(plt::Plot, x, y, color, markercolor,
     plt.widget[:addHeatMap](leftaxis, string(label), heatmap_c...)
   else
     args = map(string, (label, linetype, linestyle, marker))
-    plt.widget[:addLine](leftaxis, width, markersize, color, args..., markercolor, fillto)
+    plt.widget[:addLine](leftaxis, width, markersize, color, args..., markercolor, fillto, fillcolor)
   end
 
   plotitem
@@ -289,17 +292,21 @@ function oplot(plotwidget::PlotWidget; kvs...)
     #   continue
     # end
 
-    # convert RGB to QColor
+    # convert Colorant to QColor
     color = getarg(:color, d, c)
-    if isa(color, Colors.RGB)
+    if isa(color, Colors.Colorant)
       color = convertRGBToQColor(color)
     end
     markercolor = getarg(:markercolor, d, c)
-    if isa(markercolor, Colors.RGB)
+    if isa(markercolor, Colors.Colorant)
       markercolor = convertRGBToQColor(markercolor)
     end
+    fillcolor = getarg(:fillcolor, d, c)
+    if isa(fillcolor, Colors.Colorant)
+      fillcolor = convertRGBToQColor(fillcolor)
+    end
     
-    line = addline(plt, x, Y[:,c], color, markercolor, [getarg(s,d,c) for s in (:axis, :label, :width, :linetype, :linestyle, :marker, :markersize, :heatmap_n, :heatmap_c, :title, :xlabel, :ylabel, :yrightlabel, :fillto)]...)
+    line = addline(plt, x, Y[:,c], color, markercolor, fillcolor, [getarg(s,d,c) for s in (:axis, :label, :width, :linetype, :linestyle, :marker, :markersize, :heatmap_n, :heatmap_c, :title, :xlabel, :ylabel, :yrightlabel, :fillto)]...)
 
     if haskey(d, :reg) && d[:reg]
       addRegressionLine(line)

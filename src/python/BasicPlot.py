@@ -280,7 +280,7 @@ class BasicPlot(Qwt.QwtPlot):
         self.setAxisAutoScale(Qwt.QwtPlot.yLeft)
         self.setAxisAutoScale(Qwt.QwtPlot.yRight)
 
-    def addLine(self, left = True, width = 2, markersize = 10, color = "black", label = "y", linetype = "line", linestyle = "solid", marker = "none", markercolor = "black", fillto = None):
+    def addLine(self, left = True, width = 2, markersize = 10, color = "black", label = "y", linetype = "line", linestyle = "solid", marker = "none", markercolor = "black", fillto = None, fillcolor = None):
         self.setAxisAutoScales()
         curve = Qwt.QwtPlotCurve(label)
         axis = Qwt.QwtPlot.yLeft if left else Qwt.QwtPlot.yRight
@@ -296,7 +296,10 @@ class BasicPlot(Qwt.QwtPlot):
             borderPen = Qt.QPen(mcolor, 1, Qt.Qt.SolidLine)
             curve.setSymbol(Qwt.QwtSymbol(self.getMarkerType(marker), interiorBrush, borderPen, Qt.QSize(markersize,markersize)))
         if fillto != None:
-            curve.setBrush(Qt.QColor(color))
+            if fillcolor == None:
+                curve.setBrush(Qt.QColor(color))
+            else:
+                curve.setBrush(Qt.QColor(fillcolor))
             curve.setBaseline(fillto)
         curve.attach(self)
 
