@@ -216,8 +216,8 @@ function addline(plt::Plot, x, y, color, markercolor, fillcolor,
 
   # check our inputs
   # @assert color in COLORS
-  @assert width > 0
-  @assert markersize > 0
+  # @assert width > 0
+  # @assert markersize > 0
   @assert linetype in LINE_TYPES
   @assert linestyle in LINE_STYLES
   @assert marker in LINE_MARKERS
