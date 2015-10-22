@@ -93,7 +93,7 @@ type CurrentScene
   defaultBrush::PyObject
   defaultPen::PyObject
 end
-const CURRENT_SCENE = CurrentScene(Nullable{Scene}(), makebrush(:black), makepen(2, :black))
+# const CURRENT_SCENE = CurrentScene(Nullable{Scene}(), makebrush(:black), makepen(2, :black))
 
 function currentScene()
   # create a new scene if it doesn't exist yet

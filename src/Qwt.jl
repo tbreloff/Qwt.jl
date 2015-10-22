@@ -1,9 +1,13 @@
 
+if VERSION >= v"0.4-"
+  __precompile__()
+end
+
 
 module Qwt
 
-# VERSION >= v"0.4.0-dev+6521" && __precompile__()
-__precompile__(false)
+# # VERSION >= v"0.4.0-dev+6521" && __precompile__()
+# __precompile__(false)
 
 
 export 
@@ -131,27 +135,43 @@ end
 using Colors
 using PyCall
 
-# function __init__()
-# print("Initializing Qwt... ")
-# global QT, PLOT, WIDGETS, QAPP
+  # print("Initializing Qwt... ")
+  # global QT, PLOT, WIDGETS, QAPP
 
-# set the PYTHONPATH
-unshift!(PyVector(pyimport("sys")["path"]), "")
+  # # set the PYTHONPATH
+  # unshift!(PyVector(pyimport("sys")["path"]), "")
 
-@pyimport PyQt4.Qt as QT
-@pyimport PyQt4.Qwt5 as QWT
-@pyimport BasicPlot as PLOT
-@pyimport pythonwidgets as WIDGETS
+  # # global QT, QWT, PLOT, WIDGETS
+  # @pyimport PyQt4.Qt as QT
+  # @pyimport PyQt4.Qwt5 as QWT
+  # @pyimport BasicPlot as PLOT
+  # @pyimport pythonwidgets as WIDGETS
 
-# QT = QT2
-# PLOT = PLOT2
-# WIDGETS = WIDGETS2
-# unshift!(PyVector(pyimport("sys")["path"]), "")  # so you can load python files from the current directory
-# @pyimport FancyPlot as FPLOT
-pygui_start(:qt_pyqt4)
-const QAPP = QT.QApplication([])
-# println("done.")
-# end
+# const QT = PyCall.PyNULL()
+# const QWT = PyCall.PyNULL()
+# const PLOT = PyCall.PyNULL()
+# const WIDGETS = PyCall.PyNULL()
+
+
+function __init__()
+
+  # copy!(QT, pyimport("PyQt4"))
+  global const QT = pywrap(pyimport("PyQt4.Qt"))
+  global const QWT = pywrap(pyimport("PyQt4.Qwt5"))
+  global const PLOT = pywrap(pyimport("BasicPlot"))
+  global const WIDGETS = pywrap(pyimport("pythonwidgets"))
+
+  # QT = QT2
+  # PLOT = PLOT2
+  # WIDGETS = WIDGETS2
+  # unshift!(PyVector(pyimport("sys")["path"]), "")  # so you can load python files from the current directory
+  # @pyimport FancyPlot as FPLOT
+  pygui_start(:qt_pyqt4)
+  global const QAPP = QT.QApplication([])
+  # println("done.")
+
+  global const CURRENT_SCENE = CurrentScene(Nullable{Scene}(), makebrush(:black), makepen(2, :black))
+end
 # ------------------------------------------------------
 
 
