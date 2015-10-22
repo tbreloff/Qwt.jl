@@ -1,5 +1,5 @@
 
-import Glob
+# import Glob
 
 type PlotAnimation
   t::Int
@@ -11,7 +11,7 @@ function animation(widget::Widget, dir::ASCIIString)
 
   # remove existing pngs
   dir = string(dir, "/")
-  map(rm, Glob.glob("qtanim*.png", dir))
+  #map(rm, Glob.glob("qtanim*.png", dir))
 
   PlotAnimation(1, widget, dir)
 end
