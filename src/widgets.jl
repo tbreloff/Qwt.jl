@@ -2,7 +2,7 @@
 # a Widget is expected to have a field "widget::PyObject" which is a QWidget
 abstract Widget
 
-roundint(x::FloatingPoint) = round(Int, x)
+roundint(x::AbstractFloat) = round(Int, x)
 
 
 # methods for the python widget
