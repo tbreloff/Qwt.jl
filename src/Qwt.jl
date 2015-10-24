@@ -124,13 +124,25 @@ export
 # Setup Qt
 # ------------------------------------------------------
 
-# add the python dir to PYTHONPATH
-qwtPythonDir = "$(Pkg.dir("Qwt"))/src/python"
-try
-    ENV["PYTHONPATH"] = ENV["PYTHONPATH"] * ":" * qwtPythonDir
-catch
-    ENV["PYTHONPATH"] = qwtPythonDir
+function addToPythonPath()
+  # add the python dir to PYTHONPATH
+  qwtPythonDir = "$(Pkg.dir("Qwt"))/src/python"
+  try
+      ENV["PYTHONPATH"] = ENV["PYTHONPATH"] * ":" * qwtPythonDir
+  catch
+      ENV["PYTHONPATH"] = qwtPythonDir
+  end
 end
+
+addToPythonPath()
+
+# # add the python dir to PYTHONPATH
+# qwtPythonDir = "$(Pkg.dir("Qwt"))/src/python"
+# try
+#     ENV["PYTHONPATH"] = ENV["PYTHONPATH"] * ":" * qwtPythonDir
+# catch
+#     ENV["PYTHONPATH"] = qwtPythonDir
+# end
 
 using Colors
 using PyCall
@@ -154,6 +166,17 @@ using PyCall
 
 
 function __init__()
+
+  # # add the python dir to PYTHONPATH
+  # qwtPythonDir = "$(Pkg.dir("Qwt"))/src/python"
+  # try
+  #     ENV["PYTHONPATH"] = ENV["PYTHONPATH"] * ":" * qwtPythonDir
+  # catch
+  #     ENV["PYTHONPATH"] = qwtPythonDir
+  # end
+
+
+  addToPythonPath()
 
   # copy!(QT, pyimport("PyQt4"))
   global const QT = pywrap(pyimport("PyQt4.Qt"))
