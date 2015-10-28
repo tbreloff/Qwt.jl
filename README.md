@@ -2,6 +2,8 @@
 
 #### Author: Thomas Breloff (@tbreloff)
 
+**NOTE**: I recommend using [Plots.jl](https://github.com/tbreloff/Plots.jl.git) as the plotting interface for Qwt.
+
 Plotting using PyQt/PyQwt and a clean interface for 2D scenes using QCanvas.  Add to PyQt GUIs and compose many widgets
 together for complex visualizations.
 
